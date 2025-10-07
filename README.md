@@ -1,4 +1,8 @@
 ## Hi there 👋
+
+<!--
+![From KlickPin CF Pixel Art Computer Screen with Moon and Stars](https://github.com/user-attachments/assets/a42fa8ec-53ce-4209-afb4-307b3716c8d6)
+
 <!--
 **harishkumar04/harishkumar04** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
 
