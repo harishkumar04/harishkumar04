@@ -2,7 +2,7 @@
 
 <img src="assets/art/stargazing.gif" alt="Stargazing on a van roof under a shooting star" width="100%" />
 
-<img src="assets/header.svg" alt="About me: R Harish Kumar, Cloud & DevOps Engineer" width="100%" />
+<img src="https://raw.githubusercontent.com/harishkumar04/harishkumar04/output/header.svg" alt="About me: R Harish Kumar, Cloud & DevOps Engineer" width="100%" />
 
 <img src="https://raw.githubusercontent.com/harishkumar04/harishkumar04/output/skyline.svg" alt="New York skyline at night, one building per week of my GitHub contributions" width="100%" />
 
@@ -18,7 +18,7 @@
 
 <img src="assets/headings/stack.svg" alt="Stack" width="100%" />
 
-<img src="assets/harbor.svg" alt="Tech stack as a night harbor: a crane loads a release container onto a ship" width="100%" />
+<img src="https://raw.githubusercontent.com/harishkumar04/harishkumar04/output/harbor.svg" alt="Tech stack as a night harbor: a crane loads a release container onto a ship" width="100%" />
 
 <img src="assets/art/journey.gif" alt="Journey: a car on a desert road at dusk" width="100%" />
 
