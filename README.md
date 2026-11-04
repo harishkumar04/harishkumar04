@@ -1,4 +1,4 @@
-<img src="assets/about/about.svg" alt="About me: R Harish Kumar, Cloud & DevOps Engineer in Chennai, India. AWS Certified Cloud Practitioner, DevOps Intern at Justo Global, B.Tech CSBS at VIT-AP (2026)." width="100%" />
+<img src="assets/about/about.svg" alt="About me: R Harish Kumar, Cloud & DevOps Engineer in Chennai, India. Breaking, fixing and building scalable, reliable systems." width="100%" />
 
 <img src="https://raw.githubusercontent.com/harishkumar04/harishkumar04/output/header.svg" alt="Terminal: kubectl get engineer harish, current focus and what I'm building now" width="100%" />
 

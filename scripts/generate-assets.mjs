@@ -134,14 +134,8 @@ ${tags}
 
 // ---------------------------------------------------------------- about me card
 function aboutCard() {
-  const W = 1000, H = 178;
-  const chips = ["AWS Certified Cloud Practitioner", "DevOps Intern @ Justo Global", "B.Tech CSBS · VIT-AP · 2026"];
-  let chipSvg = "";
-  chips.forEach((c, i) => {
-    const y = 52 + i * 38, w = c.length * 7.2 + 34;
-    chipSvg += `<g class="in" style="animation-delay:${(0.35 + i * 0.12).toFixed(2)}s"><rect x="${W - 32 - w}" y="${y}" width="${w}" height="26" rx="13" fill="#0d1328" stroke="#26305c"/><circle cx="${W - 32 - w + 15}" cy="${y + 13}" r="3" fill="#ffb347"/><text x="${W - 32 - w + 26}" y="${y + 17.5}" font-size="12" fill="#cfe0ff">${esc(c)}</text></g>`;
-  });
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="About me: R Harish Kumar, Cloud and DevOps Engineer in Chennai, India. AWS Certified Cloud Practitioner, DevOps Intern at Justo Global, B.Tech CSBS at VIT-AP 2026.">
+  const W = 1000, H = 158;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="About me: R Harish Kumar, Cloud and DevOps Engineer in Chennai, India. Breaking, fixing and building scalable, reliable systems.">
 <defs>
 <radialGradient id="glow" cx="1" cy="1" r="0.9"><stop offset="0" stop-color="#ff9a5a" stop-opacity=".16"/><stop offset="1" stop-color="#ff9a5a" stop-opacity="0"/></radialGradient>
 <style>${FONT}
@@ -154,9 +148,7 @@ function aboutCard() {
 <text x="50" y="36" font-size="13" font-weight="700" letter-spacing="4" fill="#5ccfff">ABOUT ME</text>
 <g class="in"><text x="32" y="80" font-size="27" font-weight="700" fill="#f2f5ff">R Harish Kumar</text>
 <text x="32" y="106" font-size="14" fill="#ffd479">Cloud &amp; DevOps Engineer · Chennai, India</text></g>
-<g class="in" style="animation-delay:.2s"><text x="32" y="138" font-size="13" fill="#9fb2e0">I build CI/CD pipelines, Kubernetes platforms on AWS and</text>
-<text x="32" y="158" font-size="13" fill="#9fb2e0">observability stacks, and automate anything I've done twice.</text></g>
-${chipSvg}
+<g class="in" style="animation-delay:.2s"><text x="32" y="136" font-size="14" fill="#9fb2e0">Breaking, fixing and building scalable, reliable systems.</text></g>
 </svg>
 `;
 }
