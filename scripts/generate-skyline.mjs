@@ -55,7 +55,6 @@ function render(weeksIn) {
   const max = Math.max(1, ...weeks.map((w) => w.count));
   const total = weeks.reduce((a, w) => a + w.count, 0);
   const maxIdx = weeks.findIndex((w) => w.count === max && max > 0);
-  const last = weeks.length - 1;
 
   let city = "", labels = "", lastMonthAt = -9;
 
@@ -119,9 +118,7 @@ function render(weeksIn) {
     g += gr("fb", parts.fb, "#ffd479", `style="animation-delay:-${(r() * 5).toFixed(2)}s"`);
     city += `<g>${g}</g>`;
 
-    const isNow = i === last;
-    labels += `<text x="${cx.toFixed(1)}" y="${roof - (style === "spire" ? 36 : 8)}" text-anchor="middle" font-size="${isNow ? 11 : 9}" fill="${isNow ? "#5ff3ff" : "#7f8fb8"}" ${isNow ? 'font-weight="700"' : ""}>${wk.count}</text>`;
-    if (isNow) labels += `<path class="pulse" d="M${(cx - 4).toFixed(1)} ${roof - (style === "spire" ? 58 : 30)} h8 l-4 5z" fill="#5ff3ff"/><text x="${cx.toFixed(1)}" y="${roof - (style === "spire" ? 62 : 34)}" text-anchor="middle" font-size="8" letter-spacing="1.5" fill="#5ff3ff">THIS WEEK</text>`;
+    labels += `<text x="${cx.toFixed(1)}" y="${roof - (style === "spire" ? 36 : 8)}" text-anchor="middle" font-size="9" fill="#7f8fb8">${wk.count}</text>`;
 
     if (wk.start) {
       const m = MONTHS[parseInt(wk.start.slice(5, 7), 10) - 1];
@@ -177,8 +174,6 @@ ${shimmer}
 <g id="city">${city}</g>
 <rect y="${GROUND}" width="${W}" height="2" fill="#0a0e1e"/><rect y="${GROUND}" width="${W}" height=".8" fill="#6f86d6" opacity=".35"/>
 ${labels}
-<text x="30" y="36" font-size="13" font-weight="700" letter-spacing="2" fill="#cfe0ff">${login.toUpperCase()} · LAST ${WEEKS} WEEKS</text>
-<text x="30" y="54" font-size="10" letter-spacing="1.5" fill="#7f8fb8">${total} CONTRIBUTIONS · ONE BUILDING = ONE WEEK · TALLEST = BEST WEEK</text>
 </svg>
 `;
 }

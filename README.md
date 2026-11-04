@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:04060e,60:0d1330,100:2b2150&height=200&section=header&text=R%20Harish%20Kumar&fontSize=48&fontColor=eaf1ff&animation=fadeIn&fontAlignY=36&desc=Cloud%20%26%20DevOps%20Engineer%20%C2%B7%20AWS%20Certified&descAlignY=58&descSize=18" alt="R Harish Kumar" />
+<img src="assets/header.svg" alt="R Harish Kumar" width="100%" />
 
 <a href="https://git.io/typing-svg">
   <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=500&size=20&duration=3200&pause=1200&color=FFD479&center=true&vCenter=true&width=720&lines=The+city+never+sleeps.+Neither+do+my+pipelines.;Every+window+lit+%3D+a+commit+shipped.;Kubernetes+%C2%B7+Terraform+%C2%B7+AWS+%C2%B7+Observability" alt="Typing SVG" />
@@ -9,8 +9,6 @@
 <br/><br/>
 
 <img src="https://raw.githubusercontent.com/harishkumar04/harishkumar04/output/skyline.svg" alt="New York skyline at night, one building per week of my GitHub contributions" width="100%" />
-
-<sub>🌃 <i>Each building is one week of my GitHub activity over the last 20 weeks. The tallest tower is my best week. Rebuilt every 6 hours.</i></sub>
 
 </div>
 
@@ -74,7 +72,5 @@ motto:     "If I do it twice, I automate it."
 
 <a href="https://www.linkedin.com/in/r-harish-kumar"><img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" /></a>
 <a href="mailto:rharish0909@gmail.com"><img src="https://img.shields.io/badge/Email-1a2142?style=for-the-badge&logo=gmail&logoColor=ffd479" alt="Email" /></a>
-
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:2b2150,40:0d1330,100:04060e&height=110&section=footer" alt="" />
 
 </div>
