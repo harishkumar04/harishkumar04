@@ -1,9 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 150" width="1000" height="150" role="img" aria-label="Jenkins-RCA-Agent">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 124" width="1000" height="124" role="img" aria-label="Jenkins-RCA-Agent">
 <defs>
 <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1022"/><stop offset="1" stop-color="#141a38"/></linearGradient>
 <linearGradient id="bld" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1d2347"/><stop offset="1" stop-color="#0b1022"/></linearGradient>
 <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-<clipPath id="card"><rect x="1" y="1" width="998" height="148" rx="14"/></clipPath>
+<clipPath id="card"><rect x="1" y="1" width="998" height="122" rx="14"/></clipPath>
 <style>text{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
 .run{stroke-dasharray:14 86;animation:run 7s linear infinite}@keyframes run{to{stroke-dashoffset:-100}}
 .neon{animation:neon 6s steps(1) infinite}@keyframes neon{0%,100%{opacity:1}62%{opacity:.35}64%{opacity:1}66%{opacity:.5}68%{opacity:1}}
@@ -12,22 +12,21 @@
 .sweep{animation:sweep 9s ease-in-out infinite}@keyframes sweep{0%,70%{transform:translateX(-300px)}100%{transform:translateX(1300px)}}
 </style>
 </defs>
-<rect x="1" y="1" width="998" height="148" rx="14" fill="url(#bg)" stroke="#232b52"/>
-<g clip-path="url(#card)"><rect class="sweep" x="0" y="-20" width="120" height="190" fill="#ffffff" opacity=".035" transform="skewX(-20)"/></g>
-<rect x="22" y="34" width="3" height="82" rx="1.5" fill="#5ff3ff" opacity=".85"/>
+<rect x="1" y="1" width="998" height="122" rx="14" fill="url(#bg)" stroke="#232b52"/>
+<g clip-path="url(#card)"><rect class="sweep" x="0" y="-20" width="120" height="164" fill="#ffffff" opacity=".035" transform="skewX(-20)"/></g>
+<rect x="22" y="30" width="3" height="64" rx="1.5" fill="#5ff3ff" opacity=".85"/>
 <g class="in">
 <text x="44" y="48" font-size="22" font-weight="700" fill="#eaf1ff">Jenkins-RCA-Agent</text>
 <text x="44" y="76" font-size="14" fill="#9fb2e0">Turns failed Jenkins builds into AI root-cause reports, spots repeat failures</text>
 <text x="44" y="96" font-size="14" fill="#9fb2e0">by fingerprint and emails the right team, with a live incident dashboard.</text>
-<rect x="44" y="114" width="61.2" height="20" rx="10" fill="#5ff3ff" fill-opacity=".1" stroke="#5ff3ff" stroke-opacity=".45"/><text x="74.6" y="128" text-anchor="middle" font-size="12" fill="#5ff3ff">Python</text><rect x="113.2" y="114" width="68.4" height="20" rx="10" fill="#5ff3ff" fill-opacity=".1" stroke="#5ff3ff" stroke-opacity=".45"/><text x="147.4" y="128" text-anchor="middle" font-size="12" fill="#5ff3ff">FastAPI</text><rect x="189.60000000000002" y="114" width="97.2" height="20" rx="10" fill="#5ff3ff" fill-opacity=".1" stroke="#5ff3ff" stroke-opacity=".45"/><text x="238.20000000000002" y="128" text-anchor="middle" font-size="12" fill="#5ff3ff">GPT-4o-mini</text><rect x="294.8" y="114" width="61.2" height="20" rx="10" fill="#5ff3ff" fill-opacity=".1" stroke="#5ff3ff" stroke-opacity=".45"/><text x="325.40000000000003" y="128" text-anchor="middle" font-size="12" fill="#5ff3ff">SQLite</text>
 </g>
 <text x="872" y="30" text-anchor="end" font-size="11" letter-spacing="2" fill="#56648f">OPEN REPO ↗</text>
 <g clip-path="url(#card)">
-<rect x="900" y="34" width="64" height="116" fill="url(#bld)"/>
+<rect x="900" y="34" width="64" height="90" fill="url(#bld)"/>
 <rect x="931.5" y="20" width="1" height="14" fill="#2a3360"/>
 <circle class="neon" cx="932" cy="20" r="2" fill="#ff4d5e"/>
-<path d="M928 44h5v6h-5zM938 44h5v6h-5zM948 55h5v6h-5zM918 66h5v6h-5zM908 77h5v6h-5zM948 77h5v6h-5zM908 88h5v6h-5zM918 88h5v6h-5zM938 99h5v6h-5zM918 110h5v6h-5zM938 110h5v6h-5zM908 121h5v6h-5zM918 121h5v6h-5zM908 132h5v6h-5zM918 132h5v6h-5zM938 132h5v6h-5z" fill="#fff" opacity=".05"/>
-<path d="M908 44h5v6h-5zM918 44h5v6h-5zM948 44h5v6h-5zM908 55h5v6h-5zM918 55h5v6h-5zM928 55h5v6h-5zM908 66h5v6h-5zM928 66h5v6h-5zM938 66h5v6h-5zM918 77h5v6h-5zM928 77h5v6h-5zM938 77h5v6h-5zM928 88h5v6h-5zM948 88h5v6h-5zM908 99h5v6h-5zM918 99h5v6h-5zM928 99h5v6h-5zM948 99h5v6h-5zM928 110h5v6h-5zM928 121h5v6h-5zM938 121h5v6h-5zM948 121h5v6h-5zM928 132h5v6h-5zM948 132h5v6h-5z" fill="#ffd479" opacity=".85"/>
+<path d="M928 44h5v6h-5zM938 44h5v6h-5zM948 55h5v6h-5zM918 66h5v6h-5zM908 77h5v6h-5zM948 77h5v6h-5zM908 88h5v6h-5zM918 88h5v6h-5zM938 99h5v6h-5zM918 110h5v6h-5zM938 110h5v6h-5z" fill="#fff" opacity=".05"/>
+<path d="M908 44h5v6h-5zM918 44h5v6h-5zM948 44h5v6h-5zM908 55h5v6h-5zM918 55h5v6h-5zM928 55h5v6h-5zM908 66h5v6h-5zM928 66h5v6h-5zM938 66h5v6h-5zM918 77h5v6h-5zM928 77h5v6h-5zM938 77h5v6h-5zM928 88h5v6h-5zM948 88h5v6h-5zM908 99h5v6h-5zM918 99h5v6h-5zM928 99h5v6h-5zM948 99h5v6h-5zM928 110h5v6h-5z" fill="#ffd479" opacity=".85"/>
 <path class="fl" d="M938 55h5v6h-5zM948 66h5v6h-5zM938 88h5v6h-5zM908 110h5v6h-5zM948 110h5v6h-5z" fill="#5ff3ff"/>
 </g>
 </svg>
