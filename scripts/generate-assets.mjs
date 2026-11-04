@@ -122,12 +122,14 @@ ${p.lines.map((l, k) => `<text x="44" y="${76 + k * 20}" font-size="14" fill="#9
 
 // ---------------------------------------------------------------- contact cards
 function contactCard(kind) {
-  const W = 480, H = 76;
+  const W = 320, H = 76;
   const C = {
     linkedin: { label: "LINKEDIN", value: "in/r-harish-kumar", accent: "#5ccfff",
-      icon: `<rect x="18" y="14" width="48" height="48" rx="11" fill="#0a66c2"/><text x="42" y="47" text-anchor="middle" font-size="24" font-weight="700" fill="#ffffff">in</text>` },
+      icon: `<rect x="16" y="14" width="48" height="48" rx="11" fill="#0a66c2"/><text x="40" y="47" text-anchor="middle" font-size="24" font-weight="700" fill="#ffffff">in</text>` },
     email: { label: "EMAIL", value: "rharish0909@gmail.com", accent: "#ffb347",
-      icon: `<rect x="18" y="14" width="48" height="48" rx="11" fill="#2a1c12" stroke="#ffb347" stroke-opacity=".6"/><rect x="29" y="28" width="26" height="19" rx="2.5" fill="none" stroke="#ffd479" stroke-width="2"/><path d="M30 30 L42 39.5 L54 30" fill="none" stroke="#ffd479" stroke-width="2" stroke-linejoin="round"/>` },
+      icon: `<rect x="16" y="14" width="48" height="48" rx="11" fill="#2a1c12" stroke="#ffb347" stroke-opacity=".6"/><rect x="27" y="28" width="26" height="19" rx="2.5" fill="none" stroke="#ffd479" stroke-width="2"/><path d="M28 30 L40 39.5 L52 30" fill="none" stroke="#ffd479" stroke-width="2" stroke-linejoin="round"/>` },
+    resume: { label: "RESUME", value: "View PDF", accent: "#3ddc84",
+      icon: `<rect x="16" y="14" width="48" height="48" rx="11" fill="#0f2a1c" stroke="#3ddc84" stroke-opacity=".6"/><path d="M31 25 h12 l7 7 v19 h-19 z" fill="none" stroke="#7df0ad" stroke-width="2" stroke-linejoin="round"/><path d="M43 25 v7 h7" fill="none" stroke="#7df0ad" stroke-width="2" stroke-linejoin="round"/><path d="M35 38 h11 M35 43 h11" stroke="#7df0ad" stroke-width="2" stroke-linecap="round"/>` },
   }[kind];
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${C.label}: ${esc(C.value)}">
 <defs><style>${FONT}
@@ -135,9 +137,9 @@ function contactCard(kind) {
 </style></defs>
 <rect x="1" y="1" width="${W - 2}" height="${H - 2}" rx="12" fill="#070b18" stroke="#1f2747"/>
 ${C.icon}
-<text x="84" y="33" font-size="11" font-weight="700" letter-spacing="3" fill="${C.accent}">${C.label}</text>
-<text x="84" y="56" font-size="16" font-weight="700" fill="#f2f5ff">${esc(C.value)}</text>
-<g class="ar"><text x="${W - 30}" y="46" text-anchor="middle" font-size="20" fill="${C.accent}">↗</text></g>
+<text x="78" y="33" font-size="11" font-weight="700" letter-spacing="3" fill="${C.accent}">${C.label}</text>
+<text x="78" y="55" font-size="14" font-weight="700" fill="#f2f5ff">${esc(C.value)}</text>
+<g class="ar"><text x="${W - 22}" y="46" text-anchor="middle" font-size="18" fill="${C.accent}">↗</text></g>
 </svg>
 `;
 }
@@ -270,7 +272,7 @@ if (LIVE) {
   mkdirSync("assets/headings", { recursive: true });
   for (const [f, l] of [["projects", "FEATURED PROJECTS"], ["contributions", "CONTRIBUTIONS"], ["connect", "CONNECT"]]) writeFileSync(`assets/headings/${f}.svg`, heading(l));
   mkdirSync("assets/contact", { recursive: true });
-  for (const k of ["linkedin", "email"]) writeFileSync(`assets/contact/${k}.svg`, contactCard(k));
+  for (const k of ["linkedin", "email", "resume"]) writeFileSync(`assets/contact/${k}.svg`, contactCard(k));
   // local previews of the dynamic images
   mkdirSync(OUT, { recursive: true });
   const demo = { repo: "Jenkins-RCA-Agent", msg: "route docker failures to the devops team", date: new Date().toISOString() };
