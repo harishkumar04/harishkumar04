@@ -14,55 +14,23 @@
 
 ---
 
-### 🌙 After hours
-
-```yaml
-name:      R Harish Kumar
-based_in:  Chennai, India
-role:      DevOps Intern @ Justo Global
-studying:  B.Tech CSE & Business Systems, VIT-AP (2026), CGPA 9.01
-certified: AWS Certified Cloud Practitioner
-builds:    [CI/CD pipelines, Kubernetes on EKS, observability stacks, AI-for-ops tools]
-motto:     "If I do it twice, I automate it."
-```
-
----
-
 ### 🏙️ Featured projects
 
-| | Project | What it does |
-|---|---|---|
-| 🏗️ | [**End-to-End-Devops-Pipeline**](https://github.com/harishkumar04/End-to-End-Devops-Pipeline) | End-to-end CI/CD on AWS EKS with Jenkins, Docker and Helm, plus Prometheus/Grafana/Loki observability |
-| 🚨 | [**Jenkins-RCA-Agent**](https://github.com/harishkumar04/Jenkins-RCA-Agent) | AI agent that analyses failed Jenkins builds and generates root-cause reports and email alerts |
-| 💬 | [**RAG-Chatbot-using-AWS-Bedrock**](https://github.com/harishkumar04/RAG-Chatbot-using-AWS-Bedrock) | RAG chatbot answering questions from uploaded documents using Bedrock and vector search |
+<a href="https://github.com/harishkumar04/End-to-End-Devops-Pipeline"><img src="assets/projects/devops-pipeline.svg" alt="End-to-End-Devops-Pipeline" width="100%" /></a>
+<a href="https://github.com/harishkumar04/Jenkins-RCA-Agent"><img src="assets/projects/jenkins-rca-agent.svg" alt="Jenkins-RCA-Agent" width="100%" /></a>
+<a href="https://github.com/harishkumar04/RAG-Chatbot-using-AWS-Bedrock"><img src="assets/projects/rag-chatbot-bedrock.svg" alt="RAG-Chatbot-using-AWS-Bedrock" width="100%" /></a>
 
 ---
 
 ### 🔧 Toolbox
 
-<div align="center">
-
-<img src="https://skillicons.dev/icons?i=aws,kubernetes,docker,terraform,jenkins,githubactions,prometheus,grafana&theme=dark" alt="Cloud and DevOps tools" />
-<br/>
-<img src="https://skillicons.dev/icons?i=linux,git,python,java,c,mysql,postgres&theme=dark" alt="Languages and databases" />
-<br/>
-<img src="https://img.shields.io/badge/Helm-0F1689?style=flat-square&logo=helm&logoColor=white" alt="Helm" />
-<img src="https://img.shields.io/badge/Loki-F46800?style=flat-square&logo=grafana&logoColor=white" alt="Loki" />
-<img src="https://img.shields.io/badge/AWS%20Bedrock-232F3E?style=flat-square&logo=amazonwebservices&logoColor=white" alt="AWS Bedrock" />
-<img src="https://img.shields.io/badge/ELK%20Stack-005571?style=flat-square&logo=elastic&logoColor=white" alt="ELK Stack" />
-
-</div>
+<img src="assets/toolbox.svg" alt="Toolbox: Infra, Delivery, Observability, AI and data" width="100%" />
 
 ---
 
 ### 📡 Signal
 
-<div align="center">
-
-<img height="165" src="https://github-readme-stats.vercel.app/api?username=harishkumar04&show_icons=true&hide_border=true&bg_color=04060e&title_color=ffd479&icon_color=5ff3ff&text_color=cfe0ff" alt="GitHub stats" />
-<img height="165" src="https://github-readme-stats.vercel.app/api/top-langs/?username=harishkumar04&layout=compact&hide_border=true&bg_color=04060e&title_color=ffd479&text_color=cfe0ff" alt="Top languages" />
-
-</div>
+<img src="https://raw.githubusercontent.com/harishkumar04/harishkumar04/output/stats.svg" alt="GitHub stats" width="100%" />
 
 ---
 

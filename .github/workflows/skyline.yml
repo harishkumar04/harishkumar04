@@ -1,12 +1,12 @@
-name: Generate Skyline
+name: Generate Skyline & Stats
 
 on:
   schedule:
-    - cron: "17 */6 * * *" # every 6 hours, so "this week" stays current
+    - cron: "17 */6 * * *" # every 6 hours
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ["scripts/generate-skyline.mjs", ".github/workflows/skyline.yml"]
+    paths: ["scripts/generate-skyline.mjs", "scripts/generate-stats.mjs", ".github/workflows/skyline.yml"]
 
 permissions:
   contents: write
@@ -22,12 +22,25 @@ jobs:
         with:
           node-version: 20
 
+      - name: Keep previous images as fallback
+        run: |
+          mkdir -p dist
+          git fetch --depth=1 origin output && git --work-tree=dist checkout origin/output -- . || true
+
       - name: Build skyline from contribution data
         run: node scripts/generate-skyline.mjs
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_LOGIN: ${{ github.repository_owner }}
           OUT: dist/skyline.svg
+
+      - name: Build stats card
+        continue-on-error: true
+        run: node scripts/generate-stats.mjs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_LOGIN: ${{ github.repository_owner }}
+          OUT: dist/stats.svg
 
       - name: Publish to output branch
         uses: crazy-max/ghaction-github-pages@v4
