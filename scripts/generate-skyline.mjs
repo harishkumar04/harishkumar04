@@ -54,7 +54,7 @@ function rng(seed) {
 
 const MONTHS = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
 
-function render(weeksIn) {
+function render(weeksIn, repos = []) {
   let weeks = weeksIn.slice(-WEEKS);
   while (weeks.length < WEEKS) weeks.unshift({ start: null, count: 0 });
 
@@ -66,6 +66,18 @@ function render(weeksIn) {
   const maxIdx = weeks.findIndex((w) => w.count === max && max > 0);
 
   let city = "", labels = "", lastMonthAt = -9;
+
+  // spotlight tour: every week with contributions, left to right, once per cycle (no repeats)
+  const D = 3.4, FADE = 0.55, LIFT = 5;
+  const tour = weeks.map((w, i) => (w.start && w.count > 0 ? i : -1)).filter((i) => i >= 0);
+  const T = Math.max(1, tour.length) * D;
+  const P = (sec) => Math.min(100, Math.max(0, (sec / T) * 100)).toFixed(3);
+  const kf = (name, k, on, off) => {
+    const s0 = k * D, e0 = (k + 1) * D;
+    return `@keyframes ${name}${k}{0%,${P(s0)}%{${off}}${P(s0 + FADE)}%,${P(e0 - FADE)}%{${on}}${P(e0)}%,100%{${off}}}`;
+  };
+  let spotCss = "", spots = "";
+  const geo = [];
 
   weeks.forEach((wk, i) => {
     const r = rng(1000 + i * 7919);
@@ -135,7 +147,12 @@ function render(weeksIn) {
     g += gr("hot", parts.hot, "#fff3d1", 'filter="url(#hotglow)"');
     g += gr("fa", parts.fa, "#ffe29a", `style="animation-delay:-${(r() * 7).toFixed(2)}s"`);
     g += gr("fb", parts.fb, "#ffd479", `style="animation-delay:-${(r() * 5).toFixed(2)}s"`);
-    city += `<g>${g}</g>`;
+    const k = tour.indexOf(i);
+    if (k >= 0) {
+      spotCss += kf("lift", k, `transform:translateY(-${LIFT}px)`, "transform:translateY(0)");
+      city += `<g style="animation:lift${k} ${T}s ease-in-out infinite">${g}</g>`;
+      geo.push({ k, i, x, w, cx, roof });
+    } else city += `<g>${g}</g>`;
 
 
     if (wk.start) {
@@ -144,6 +161,29 @@ function render(weeksIn) {
       if (m !== prev && i - lastMonthAt >= 3 && (lastMonthAt = i) >= 0) labels += `<text x="${x.toFixed(1)}" y="${GROUND + 18}" font-size="9" letter-spacing="1.5" fill="#56648f">${m}</text>`;
     }
   });
+
+  // ---- spotlight overlay: glowing outline on the lifted building + a glass info box with a connector
+  const MONTHS3 = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+  const fmtDay = (iso) => `${+iso.slice(8, 10)} ${MONTHS3[+iso.slice(5, 7) - 1]}`;
+  const plusDays = (iso, n) => { const d = new Date(iso + "T00:00:00Z"); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); };
+  const clip = (str, n) => (str.length > n ? str.slice(0, n - 1) + "…" : str);
+  const BW = 232, BH = 60, BY = 12;
+  for (const { k, i, x, w, cx, roof } of geo) {
+    const wk = weeks[i];
+    const names = [...new Set((repos[i] || []).filter(([, c]) => c > 0).map(([n]) => n))].slice(0, 2);
+    const bx = Math.min(W - BW - 10, Math.max(10, cx - BW / 2));
+    const top = roof - LIFT;
+    spotCss += kf("spot", k, "opacity:1", "opacity:0");
+    let g = `<rect x="${(x - 3).toFixed(1)}" y="${top - 4}" width="${(w + 6).toFixed(1)}" height="${GROUND - top + 4}" rx="3" fill="none" stroke="#ffd479" stroke-width="1.6" opacity=".9" filter="url(#spotglow)"/>`;
+    g += `<rect x="${(x - 3).toFixed(1)}" y="${top - 4}" width="${(w + 6).toFixed(1)}" height="${GROUND - top + 4}" rx="3" fill="#ffd479" opacity=".06"/>`;
+    if (top - 10 > BY + BH + 4) g += `<path d="M${cx.toFixed(1)} ${BY + BH} V${top - 8}" stroke="#ffd479" stroke-opacity=".55" stroke-width="1" stroke-dasharray="3 3"/><circle cx="${cx.toFixed(1)}" cy="${top - 8}" r="2" fill="#ffd479"/>`;
+    g += `<rect x="${bx.toFixed(1)}" y="${BY}" width="${BW}" height="${BH}" rx="9" fill="#090e22" fill-opacity=".96" stroke="#5ccfff" stroke-opacity=".4"/>`;
+    g += `<rect x="${bx.toFixed(1)}" y="${BY}" width="3" height="${BH}" rx="1.5" fill="#ffd479"/>`;
+    g += `<text x="${(bx + 16).toFixed(1)}" y="${BY + 19}" font-size="10" letter-spacing="1.5" fill="#ffd479">${fmtDay(wk.start)} – ${fmtDay(plusDays(wk.start, 6))}</text>`;
+    g += `<text x="${(bx + 16).toFixed(1)}" y="${BY + 38}" font-size="15" font-weight="700" fill="#f2f5ff">${wk.count} contribution${wk.count === 1 ? "" : "s"}</text>`;
+    if (names.length) g += `<text x="${(bx + 16).toFixed(1)}" y="${BY + 52}" font-size="10" fill="#8fa0cc">${clip(names.join(" · "), 34).replace(/&/g, "&amp;").replace(/</g, "&lt;")}</text>`;
+    spots += `<g style="animation:spot${k} ${T}s ease-in-out infinite;opacity:0">${g}</g>`;
+  }
 
   const rs = rng(42);
   let stars = "";
@@ -167,6 +207,7 @@ function render(weeksIn) {
 <linearGradient id="b0" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a2142"/><stop offset="1" stop-color="#0b1022"/></linearGradient>
 <linearGradient id="b1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#151b38"/><stop offset="1" stop-color="#090d1d"/></linearGradient>
 <linearGradient id="b2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1d1f45"/><stop offset="1" stop-color="#0c1024"/></linearGradient>
+<filter id="spotglow" x="-50%" y="-20%" width="200%" height="140%"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
 <filter id="hotglow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
 <style>
 .hot{animation:hot 3s ease-in-out infinite}@keyframes hot{50%{opacity:.75}}
@@ -175,6 +216,7 @@ text{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
 .fa{animation:fa 9s steps(1) infinite}@keyframes fa{0%,100%{opacity:1}35%{opacity:.05}55%{opacity:1}}
 .fb{animation:fb 6s steps(1) infinite}@keyframes fb{0%,100%{opacity:.9}50%{opacity:.05}70%{opacity:.9}}
 .bl{animation:bl 2.4s ease-in-out infinite}@keyframes bl{0%,100%{opacity:.15}35%{opacity:1}}
+${spotCss}
 .pulse{animation:pu 1.8s ease-in-out infinite}@keyframes pu{0%,100%{opacity:.4;transform:translateY(0)}50%{opacity:1;transform:translateY(3px)}}
 .sh{animation:sh 5s ease-in-out infinite}@keyframes sh{0%,100%{opacity:0}50%{opacity:.22}}
 .plane{animation:fly 50s linear infinite}@keyframes fly{from{transform:translateX(-80px)}to{transform:translateX(1080px)}}
@@ -194,6 +236,7 @@ ${shimmer}
 <g id="city">${city}</g>
 <rect y="${GROUND}" width="${W}" height="2" fill="#0a0e1e"/><rect y="${GROUND}" width="${W}" height=".8" fill="#6f86d6" opacity=".35"/>
 ${labels}
+${spots}
 </svg>
 `;
 }
@@ -225,7 +268,11 @@ function addDays(iso, n) {
 const weeksRaw = demo ? demoWeeks() : await fetchWeeks();
 const weeks = weeksRaw.slice(-WEEKS);
 while (weeks.length < WEEKS) weeks.unshift({ start: null, count: 0 });
-const svg = render(weeks);
+let repos = weeks.map(() => []);
+try {
+  repos = demo ? weeks.map((w) => (w.count ? [["Portfolio-website", Math.ceil(w.count * 0.6)], ["Devops", Math.floor(w.count * 0.3)]] : [])) : await fetchTopRepos(weeks);
+} catch (e) { console.warn("top repos unavailable:", e.message); }
+const svg = render(weeks, repos);
 mkdirSync(dirname(out), { recursive: true });
 writeFileSync(out, svg);
 
@@ -233,10 +280,6 @@ writeFileSync(out, svg);
 const W = 1000, H = 440, PAD = 40, slot = (W - PAD * 2) / WEEKS;
 const dir = join(dirname(out), "skyline");
 mkdirSync(dir, { recursive: true });
-let repos = weeks.map(() => []);
-try {
-  repos = demo ? weeks.map((w, i) => (w.count ? [["Portfolio-website", Math.ceil(w.count * 0.6)], ["Devops", Math.floor(w.count * 0.3)]] : [])) : await fetchTopRepos(weeks);
-} catch (e) { console.warn("top repos unavailable:", e.message); }
 const details = weeks.map((w, i) => {
   const x0 = i === 0 ? 0 : PAD + i * slot, x1 = i === WEEKS - 1 ? W : PAD + (i + 1) * slot;
   const file = `w${String(i).padStart(2, "0")}.svg`;
