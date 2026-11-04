@@ -17,5 +17,6 @@
 
 <img src="assets/headings/connect.svg" alt="Connect" width="100%" />
 
-<a href="https://www.linkedin.com/in/r-harish-kumar"><img src="assets/contact/linkedin.svg" alt="LinkedIn: in/r-harish-kumar" width="49%" /></a>
-<a href="mailto:rharish0909@gmail.com"><img src="assets/contact/email.svg" alt="Email: rharish0909@gmail.com" width="49%" /></a>
+<a href="https://www.linkedin.com/in/r-harish-kumar"><img src="assets/contact/linkedin.svg" alt="LinkedIn: in/r-harish-kumar" width="32.5%" /></a>
+<a href="mailto:rharish0909@gmail.com"><img src="assets/contact/email.svg" alt="Email: rharish0909@gmail.com" width="32.5%" /></a>
+<a href="https://drive.google.com/file/d/1EkubQ4wFilWgiNlZ-Dxq8VVNMLBR9j-C/view?usp=sharing"><img src="assets/contact/resume.svg" alt="Resume (PDF)" width="32.5%" /></a>
