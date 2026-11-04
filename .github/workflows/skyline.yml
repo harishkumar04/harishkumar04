@@ -1,4 +1,4 @@
-name: Generate Skyline & Stats
+name: Generate Skyline
 
 on:
   schedule:
@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ["scripts/generate-skyline.mjs", "scripts/generate-stats.mjs", ".github/workflows/skyline.yml"]
+    paths: ["scripts/generate-skyline.mjs", ".github/workflows/skyline.yml"]
 
 permissions:
   contents: write
@@ -33,14 +33,6 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_LOGIN: ${{ github.repository_owner }}
           OUT: dist/skyline.svg
-
-      - name: Build stats card
-        continue-on-error: true
-        run: node scripts/generate-stats.mjs
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GH_LOGIN: ${{ github.repository_owner }}
-          OUT: dist/stats.svg
 
       - name: Publish to output branch
         uses: crazy-max/ghaction-github-pages@v4
