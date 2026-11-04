@@ -2,11 +2,11 @@ name: Generate Skyline
 
 on:
   schedule:
-    - cron: "23 * * * *" # hourly (GitHub may delay or skip some scheduled runs)
+    - cron: "17 */6 * * *" # every 6 hours (free for public repos)
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ["scripts/generate-skyline.mjs", "scripts/generate-assets.mjs", ".github/workflows/skyline.yml"]
+    paths: ["scripts/generate-skyline.mjs", "scripts/generate-assets.mjs", "scripts/update-readme.mjs", ".github/workflows/skyline.yml"]
 
 permissions:
   contents: write
@@ -38,6 +38,19 @@ jobs:
         run: node scripts/generate-assets.mjs --live --out dist
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_LOGIN: ${{ github.repository_owner }}
+
+      - name: Update the skyline links in the README (only commits when something changed)
+        run: |
+          node scripts/update-readme.mjs dist/skyline/weeks.json
+          if ! git diff --quiet README.md; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add README.md
+            git commit -m "Update skyline week links"
+            git pull --rebase -q origin main && git push origin HEAD:main || echo "README push skipped"
+          fi
+        env:
           GH_LOGIN: ${{ github.repository_owner }}
 
       - name: Publish to output branch

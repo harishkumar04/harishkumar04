@@ -13,7 +13,9 @@
 
 <picture><source media="(prefers-color-scheme: light)" srcset="assets/headings/contributions-light.svg" /><img src="assets/headings/contributions.svg" alt="Contributions" width="100%" /></picture>
 
+<!-- skyline:start -->
 <img src="https://raw.githubusercontent.com/harishkumar04/harishkumar04/output/skyline.svg" alt="New York skyline at night, one building per week of my GitHub contributions" width="100%" />
+<!-- skyline:end -->
 
 <picture><source media="(prefers-color-scheme: light)" srcset="assets/headings/connect-light.svg" /><img src="assets/headings/connect.svg" alt="Connect" width="100%" /></picture>
 
