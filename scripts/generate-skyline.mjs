@@ -3,7 +3,7 @@
 // One building = one week of GitHub contributions (last 20 weeks).
 // Usage: GH_TOKEN=... GH_LOGIN=user node scripts/generate-skyline.mjs   (or --demo for sample data)
 import { writeFileSync, mkdirSync } from "node:fs";
-import { dirname } from "node:path";
+import { dirname, join } from "node:path";
 
 const WEEKS = 20;
 const login = process.env.GH_LOGIN || "harishkumar04";
@@ -198,7 +198,50 @@ ${labels}
 `;
 }
 
-const weeks = demo ? demoWeeks() : await fetchWeeks();
+// ---------------------------------------------------------------- per-week details
+// top repos per week (commit contributions), one aliased GraphQL query for all weeks
+async function fetchTopRepos(weeks) {
+  const parts = weeks.map((w, i) => {
+    if (!w.start) return "";
+    const from = `${w.start}T00:00:00Z`, to = `${addDays(w.start, 6)}T23:59:59Z`;
+    return `w${i}: contributionsCollection(from:"${from}",to:"${to}"){commitContributionsByRepository(maxRepositories:3){repository{name} contributions{totalCount}}}`;
+  }).join("\n");
+  const res = await fetch("https://api.github.com/graphql", {
+    method: "POST",
+    headers: { Authorization: `bearer ${process.env.GH_TOKEN}`, "Content-Type": "application/json", "User-Agent": "skyline-generator" },
+    body: JSON.stringify({ query: `query($login:String!){user(login:$login){${parts}}}`, variables: { login } }),
+  });
+  const json = await res.json();
+  if (!res.ok || json.errors) throw new Error("GitHub API error: " + JSON.stringify(json.errors || res.status));
+  return weeks.map((_, i) => (json.data.user[`w${i}`]?.commitContributionsByRepository || []).map((r) => [r.repository.name, r.contributions.totalCount]));
+}
+
+function addDays(iso, n) {
+  const d = new Date(iso + "T00:00:00Z");
+  d.setUTCDate(d.getUTCDate() + n);
+  return d.toISOString().slice(0, 10);
+}
+
+const weeksRaw = demo ? demoWeeks() : await fetchWeeks();
+const weeks = weeksRaw.slice(-WEEKS);
+while (weeks.length < WEEKS) weeks.unshift({ start: null, count: 0 });
+const svg = render(weeks);
 mkdirSync(dirname(out), { recursive: true });
-writeFileSync(out, render(weeks));
-console.log(`Wrote ${out} (${weeks.length} weeks, ${weeks.reduce((a, w) => a + w.count, 0)} contributions)`);
+writeFileSync(out, svg);
+
+// one slice per building, so each week can be its own link in the README
+const W = 1000, H = 440, PAD = 40, slot = (W - PAD * 2) / WEEKS;
+const dir = join(dirname(out), "skyline");
+mkdirSync(dir, { recursive: true });
+let repos = weeks.map(() => []);
+try {
+  repos = demo ? weeks.map((w, i) => (w.count ? [["Portfolio-website", Math.ceil(w.count * 0.6)], ["Devops", Math.floor(w.count * 0.3)]] : [])) : await fetchTopRepos(weeks);
+} catch (e) { console.warn("top repos unavailable:", e.message); }
+const details = weeks.map((w, i) => {
+  const x0 = i === 0 ? 0 : PAD + i * slot, x1 = i === WEEKS - 1 ? W : PAD + (i + 1) * slot;
+  const file = `w${String(i).padStart(2, "0")}.svg`;
+  writeFileSync(join(dir, file), svg.replace(`viewBox="0 0 ${W} ${H}" width="${W}" height="${H}"`, `viewBox="${x0} 0 ${x1 - x0} ${H}" width="${x1 - x0}" height="${H}"`));
+  return { file, width: (x1 - x0) / W, start: w.start, end: w.start ? addDays(w.start, 6) : null, count: w.count, repos: repos[i] };
+});
+writeFileSync(join(dir, "weeks.json"), JSON.stringify(details, null, 1));
+console.log(`Wrote ${out} + ${WEEKS} weekly slices (${weeks.reduce((a, w) => a + w.count, 0)} contributions)`);
