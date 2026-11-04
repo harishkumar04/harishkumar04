@@ -132,6 +132,57 @@ ${tags}
 `;
 }
 
+// ---------------------------------------------------------------- about me card
+function aboutCard() {
+  const W = 1000, H = 178;
+  const chips = ["AWS Certified Cloud Practitioner", "DevOps Intern @ Justo Global", "B.Tech CSBS · VIT-AP · 2026"];
+  let chipSvg = "";
+  chips.forEach((c, i) => {
+    const y = 52 + i * 38, w = c.length * 7.2 + 34;
+    chipSvg += `<g class="in" style="animation-delay:${(0.35 + i * 0.12).toFixed(2)}s"><rect x="${W - 32 - w}" y="${y}" width="${w}" height="26" rx="13" fill="#0d1328" stroke="#26305c"/><circle cx="${W - 32 - w + 15}" cy="${y + 13}" r="3" fill="#ffb347"/><text x="${W - 32 - w + 26}" y="${y + 17.5}" font-size="12" fill="#cfe0ff">${esc(c)}</text></g>`;
+  });
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="About me: R Harish Kumar, Cloud and DevOps Engineer in Chennai, India. AWS Certified Cloud Practitioner, DevOps Intern at Justo Global, B.Tech CSBS at VIT-AP 2026.">
+<defs>
+<radialGradient id="glow" cx="1" cy="1" r="0.9"><stop offset="0" stop-color="#ff9a5a" stop-opacity=".16"/><stop offset="1" stop-color="#ff9a5a" stop-opacity="0"/></radialGradient>
+<style>${FONT}
+.in{animation:in 1s ease-out both}@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.sq{animation:sq 1.4s steps(1) infinite}@keyframes sq{50%{opacity:.3}}
+</style></defs>
+<rect x="1" y="1" width="${W - 2}" height="${H - 2}" rx="12" fill="#070b18" stroke="#1f2747"/>
+<rect x="1" y="1" width="${W - 2}" height="${H - 2}" rx="12" fill="url(#glow)"/>
+<rect class="sq" x="32" y="27" width="9" height="9" fill="#5ccfff"/>
+<text x="50" y="36" font-size="13" font-weight="700" letter-spacing="4" fill="#5ccfff">ABOUT ME</text>
+<g class="in"><text x="32" y="80" font-size="27" font-weight="700" fill="#f2f5ff">R Harish Kumar</text>
+<text x="32" y="106" font-size="14" fill="#ffd479">Cloud &amp; DevOps Engineer · Chennai, India</text></g>
+<g class="in" style="animation-delay:.2s"><text x="32" y="138" font-size="13" fill="#9fb2e0">I build CI/CD pipelines, Kubernetes platforms on AWS and</text>
+<text x="32" y="158" font-size="13" fill="#9fb2e0">observability stacks, and automate anything I've done twice.</text></g>
+${chipSvg}
+</svg>
+`;
+}
+
+// ---------------------------------------------------------------- contact cards
+function contactCard(kind) {
+  const W = 480, H = 76;
+  const C = {
+    linkedin: { label: "LINKEDIN", value: "in/r-harish-kumar", accent: "#5ccfff",
+      icon: `<rect x="18" y="14" width="48" height="48" rx="11" fill="#0a66c2"/><text x="42" y="47" text-anchor="middle" font-size="24" font-weight="700" fill="#ffffff">in</text>` },
+    email: { label: "EMAIL", value: "rharish0909@gmail.com", accent: "#ffb347",
+      icon: `<rect x="18" y="14" width="48" height="48" rx="11" fill="#2a1c12" stroke="#ffb347" stroke-opacity=".6"/><rect x="29" y="28" width="26" height="19" rx="2.5" fill="none" stroke="#ffd479" stroke-width="2"/><path d="M30 30 L42 39.5 L54 30" fill="none" stroke="#ffd479" stroke-width="2" stroke-linejoin="round"/>` },
+  }[kind];
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${C.label}: ${esc(C.value)}">
+<defs><style>${FONT}
+.ar{animation:ar 2.4s ease-in-out infinite}@keyframes ar{50%{transform:translate(3px,-3px)}}
+</style></defs>
+<rect x="1" y="1" width="${W - 2}" height="${H - 2}" rx="12" fill="#070b18" stroke="#1f2747"/>
+${C.icon}
+<text x="84" y="33" font-size="11" font-weight="700" letter-spacing="3" fill="${C.accent}">${C.label}</text>
+<text x="84" y="56" font-size="16" font-weight="700" fill="#f2f5ff">${esc(C.value)}</text>
+<g class="ar"><text x="${W - 30}" y="46" text-anchor="middle" font-size="20" fill="${C.accent}">↗</text></g>
+</svg>
+`;
+}
+
 // ---------------------------------------------------------------- section headings
 function heading(label) {
   const W = 1000, H = 48, y = 30, tw = label.length * 9 * 1.0 + (label.length - 1) * 4;
@@ -258,10 +309,14 @@ if (LIVE) {
   mkdirSync("assets/projects", { recursive: true });
   PROJECTS.forEach((p, i) => writeFileSync(`assets/projects/${p.slug}.svg`, projectCard(p, i)));
   mkdirSync("assets/headings", { recursive: true });
-  for (const [f, l] of [["projects", "FEATURED PROJECTS"], ["connect", "CONNECT"]]) writeFileSync(`assets/headings/${f}.svg`, heading(l));
+  for (const [f, l] of [["projects", "FEATURED PROJECTS"], ["contributions", "CONTRIBUTIONS"], ["connect", "CONNECT"]]) writeFileSync(`assets/headings/${f}.svg`, heading(l));
+  mkdirSync("assets/about", { recursive: true });
+  writeFileSync("assets/about/about.svg", aboutCard());
+  mkdirSync("assets/contact", { recursive: true });
+  for (const k of ["linkedin", "email"]) writeFileSync(`assets/contact/${k}.svg`, contactCard(k));
   // local previews of the dynamic images
   mkdirSync(OUT, { recursive: true });
   const demo = { repo: "Jenkins-RCA-Agent", msg: "route docker failures to the devops team", date: new Date().toISOString() };
   writeFileSync(`${OUT}/header.svg`, header(demo));
-  console.log(`Wrote assets/projects/*.svg, assets/headings/*.svg and previews in ${OUT}/`);
+  console.log(`Wrote assets/about, assets/contact, assets/projects, assets/headings and previews in ${OUT}/`);
 }

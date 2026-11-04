@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 48" width="1000" height="48" role="img" aria-label="CONTRIBUTIONS">
+<defs><style>text{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.sq{animation:sq 1.4s steps(1) infinite}@keyframes sq{50%{opacity:.25}}
+.ln{stroke-dasharray:1000;stroke-dashoffset:1000;animation:ln 1.6s .2s ease-out forwards}@keyframes ln{to{stroke-dashoffset:0}}
+.dot{animation:dot 6s ease-in-out infinite}@keyframes dot{0%{transform:translateX(0);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateX(783px);opacity:0}}
+</style></defs>
+<rect class="sq" x="2" y="19" width="10" height="10" fill="#5ccfff"/>
+<text x="26" y="30" font-size="15" font-weight="700" letter-spacing="4" fill="#5ccfff">CONTRIBUTIONS</text>
+<line class="ln" x1="213" y1="24" x2="1000" y2="24" stroke="#232b52" stroke-width="1.5"/>
+<circle class="dot" cx="213" cy="24" r="2.5" fill="#5ccfff"/>
+</svg>

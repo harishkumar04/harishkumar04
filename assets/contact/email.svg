@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 76" width="480" height="76" role="img" aria-label="EMAIL: rharish0909@gmail.com">
+<defs><style>text{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.ar{animation:ar 2.4s ease-in-out infinite}@keyframes ar{50%{transform:translate(3px,-3px)}}
+</style></defs>
+<rect x="1" y="1" width="478" height="74" rx="12" fill="#070b18" stroke="#1f2747"/>
+<rect x="18" y="14" width="48" height="48" rx="11" fill="#2a1c12" stroke="#ffb347" stroke-opacity=".6"/><rect x="29" y="28" width="26" height="19" rx="2.5" fill="none" stroke="#ffd479" stroke-width="2"/><path d="M30 30 L42 39.5 L54 30" fill="none" stroke="#ffd479" stroke-width="2" stroke-linejoin="round"/>
+<text x="84" y="33" font-size="11" font-weight="700" letter-spacing="3" fill="#ffb347">EMAIL</text>
+<text x="84" y="56" font-size="16" font-weight="700" fill="#f2f5ff">rharish0909@gmail.com</text>
+<g class="ar"><text x="450" y="46" text-anchor="middle" font-size="20" fill="#ffb347">↗</text></g>
+</svg>
