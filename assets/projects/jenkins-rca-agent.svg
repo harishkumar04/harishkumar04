@@ -14,13 +14,12 @@
 </defs>
 <rect x="1" y="1" width="998" height="148" rx="14" fill="url(#bg)" stroke="#232b52"/>
 <g clip-path="url(#card)"><rect class="sweep" x="0" y="-20" width="120" height="190" fill="#ffffff" opacity=".035" transform="skewX(-20)"/></g>
-<rect class="run" x="1" y="1" width="998" height="148" rx="14" fill="none" stroke="#5ff3ff" stroke-width="2" pathLength="100" filter="url(#glow)"/>
-<text class="neon" x="62" y="92" text-anchor="middle" font-size="46" font-weight="700" fill="#5ff3ff" filter="url(#glow)">02</text>
+<rect x="22" y="34" width="3" height="82" rx="1.5" fill="#5ff3ff" opacity=".85"/>
 <g class="in">
-<text x="120" y="48" font-size="22" font-weight="700" fill="#eaf1ff">Jenkins-RCA-Agent</text>
-<text x="120" y="76" font-size="14" fill="#9fb2e0">AI agent that reads failed Jenkins builds, fingerprints recurring incidents,</text>
-<text x="120" y="96" font-size="14" fill="#9fb2e0">routes them to the right team and emails an RCA report with a fix playbook.</text>
-<rect x="120" y="114" width="61.2" height="20" rx="10" fill="#5ff3ff" fill-opacity=".1" stroke="#5ff3ff" stroke-opacity=".45"/><text x="150.6" y="128" text-anchor="middle" font-size="12" fill="#5ff3ff">Python</text><rect x="189.2" y="114" width="68.4" height="20" rx="10" fill="#5ff3ff" fill-opacity=".1" stroke="#5ff3ff" stroke-opacity=".45"/><text x="223.39999999999998" y="128" text-anchor="middle" font-size="12" fill="#5ff3ff">FastAPI</text><rect x="265.6" y="114" width="97.2" height="20" rx="10" fill="#5ff3ff" fill-opacity=".1" stroke="#5ff3ff" stroke-opacity=".45"/><text x="314.20000000000005" y="128" text-anchor="middle" font-size="12" fill="#5ff3ff">GPT-4o-mini</text><rect x="370.8" y="114" width="61.2" height="20" rx="10" fill="#5ff3ff" fill-opacity=".1" stroke="#5ff3ff" stroke-opacity=".45"/><text x="401.40000000000003" y="128" text-anchor="middle" font-size="12" fill="#5ff3ff">Docker</text>
+<text x="44" y="48" font-size="22" font-weight="700" fill="#eaf1ff">Jenkins-RCA-Agent</text>
+<text x="44" y="76" font-size="14" fill="#9fb2e0">Turns failed Jenkins builds into AI root-cause reports, spots repeat failures</text>
+<text x="44" y="96" font-size="14" fill="#9fb2e0">by fingerprint and emails the right team, with a live incident dashboard.</text>
+<rect x="44" y="114" width="61.2" height="20" rx="10" fill="#5ff3ff" fill-opacity=".1" stroke="#5ff3ff" stroke-opacity=".45"/><text x="74.6" y="128" text-anchor="middle" font-size="12" fill="#5ff3ff">Python</text><rect x="113.2" y="114" width="68.4" height="20" rx="10" fill="#5ff3ff" fill-opacity=".1" stroke="#5ff3ff" stroke-opacity=".45"/><text x="147.4" y="128" text-anchor="middle" font-size="12" fill="#5ff3ff">FastAPI</text><rect x="189.60000000000002" y="114" width="97.2" height="20" rx="10" fill="#5ff3ff" fill-opacity=".1" stroke="#5ff3ff" stroke-opacity=".45"/><text x="238.20000000000002" y="128" text-anchor="middle" font-size="12" fill="#5ff3ff">GPT-4o-mini</text><rect x="294.8" y="114" width="61.2" height="20" rx="10" fill="#5ff3ff" fill-opacity=".1" stroke="#5ff3ff" stroke-opacity=".45"/><text x="325.40000000000003" y="128" text-anchor="middle" font-size="12" fill="#5ff3ff">SQLite</text>
 </g>
 <text x="872" y="30" text-anchor="end" font-size="11" letter-spacing="2" fill="#56648f">OPEN REPO ↗</text>
 <g clip-path="url(#card)">

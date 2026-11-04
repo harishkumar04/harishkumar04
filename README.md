@@ -1,12 +1,8 @@
 <div align="center">
 
-<img src="assets/header.svg" alt="R Harish Kumar" width="100%" />
+<img src="assets/art/stargazing.jpg" alt="Stargazing on a van roof under a shooting star" width="100%" />
 
-<a href="https://git.io/typing-svg">
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=500&size=20&duration=3200&pause=1200&color=FFD479&center=true&vCenter=true&width=720&lines=The+city+never+sleeps.+Neither+do+my+pipelines.;Every+window+lit+%3D+a+commit+shipped.;Kubernetes+%C2%B7+Terraform+%C2%B7+AWS+%C2%B7+Observability" alt="Typing SVG" />
-</a>
-
-<br/><br/>
+<img src="assets/header.svg" alt="About me: R Harish Kumar, Cloud & DevOps Engineer" width="100%" />
 
 <img src="https://raw.githubusercontent.com/harishkumar04/harishkumar04/output/skyline.svg" alt="New York skyline at night, one building per week of my GitHub contributions" width="100%" />
 
@@ -18,11 +14,13 @@
 <a href="https://github.com/harishkumar04/Jenkins-RCA-Agent"><img src="assets/projects/jenkins-rca-agent.svg" alt="Jenkins-RCA-Agent" width="100%" /></a>
 <a href="https://github.com/harishkumar04/RAG-Chatbot-using-AWS-Bedrock"><img src="assets/projects/rag-chatbot-bedrock.svg" alt="RAG-Chatbot-using-AWS-Bedrock" width="100%" /></a>
 
+<img src="assets/art/waterfall.gif" alt="Pixel-art waterfall in a forest" width="100%" />
 
 <img src="assets/headings/stack.svg" alt="Stack" width="100%" />
 
 <img src="assets/stack.svg" alt="Tech stack" width="100%" />
 
+<img src="assets/art/journey.gif" alt="Journey: a car on a desert road at dusk" width="100%" />
 
 <img src="assets/headings/connect.svg" alt="Connect" width="100%" />
 
