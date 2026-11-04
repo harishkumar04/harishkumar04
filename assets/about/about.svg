@@ -1,17 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 178" width="1000" height="178" role="img" aria-label="About me: R Harish Kumar, Cloud and DevOps Engineer in Chennai, India. AWS Certified Cloud Practitioner, DevOps Intern at Justo Global, B.Tech CSBS at VIT-AP 2026.">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 158" width="1000" height="158" role="img" aria-label="About me: R Harish Kumar, Cloud and DevOps Engineer in Chennai, India. Breaking, fixing and building scalable, reliable systems.">
 <defs>
 <radialGradient id="glow" cx="1" cy="1" r="0.9"><stop offset="0" stop-color="#ff9a5a" stop-opacity=".16"/><stop offset="1" stop-color="#ff9a5a" stop-opacity="0"/></radialGradient>
 <style>text{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
 .in{animation:in 1s ease-out both}@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 .sq{animation:sq 1.4s steps(1) infinite}@keyframes sq{50%{opacity:.3}}
 </style></defs>
-<rect x="1" y="1" width="998" height="176" rx="12" fill="#070b18" stroke="#1f2747"/>
-<rect x="1" y="1" width="998" height="176" rx="12" fill="url(#glow)"/>
+<rect x="1" y="1" width="998" height="156" rx="12" fill="#070b18" stroke="#1f2747"/>
+<rect x="1" y="1" width="998" height="156" rx="12" fill="url(#glow)"/>
 <rect class="sq" x="32" y="27" width="9" height="9" fill="#5ccfff"/>
 <text x="50" y="36" font-size="13" font-weight="700" letter-spacing="4" fill="#5ccfff">ABOUT ME</text>
 <g class="in"><text x="32" y="80" font-size="27" font-weight="700" fill="#f2f5ff">R Harish Kumar</text>
 <text x="32" y="106" font-size="14" fill="#ffd479">Cloud &amp; DevOps Engineer · Chennai, India</text></g>
-<g class="in" style="animation-delay:.2s"><text x="32" y="138" font-size="13" fill="#9fb2e0">I build CI/CD pipelines, Kubernetes platforms on AWS and</text>
-<text x="32" y="158" font-size="13" fill="#9fb2e0">observability stacks, and automate anything I've done twice.</text></g>
-<g class="in" style="animation-delay:0.35s"><rect x="703.6" y="52" width="264.4" height="26" rx="13" fill="#0d1328" stroke="#26305c"/><circle cx="718.6" cy="65" r="3" fill="#ffb347"/><text x="729.6" y="69.5" font-size="12" fill="#cfe0ff">AWS Certified Cloud Practitioner</text></g><g class="in" style="animation-delay:0.47s"><rect x="732.4" y="90" width="235.6" height="26" rx="13" fill="#0d1328" stroke="#26305c"/><circle cx="747.4" cy="103" r="3" fill="#ffb347"/><text x="758.4" y="107.5" font-size="12" fill="#cfe0ff">DevOps Intern @ Justo Global</text></g><g class="in" style="animation-delay:0.59s"><rect x="739.6" y="128" width="228.4" height="26" rx="13" fill="#0d1328" stroke="#26305c"/><circle cx="754.6" cy="141" r="3" fill="#ffb347"/><text x="765.6" y="145.5" font-size="12" fill="#cfe0ff">B.Tech CSBS · VIT-AP · 2026</text></g>
+<g class="in" style="animation-delay:.2s"><text x="32" y="136" font-size="14" fill="#9fb2e0">Breaking, fixing and building scalable, reliable systems.</text></g>
 </svg>
