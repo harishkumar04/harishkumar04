@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/art/stargazing.jpg" alt="Stargazing on a van roof under a shooting star" width="100%" />
+<img src="assets/art/stargazing.gif" alt="Stargazing on a van roof under a shooting star" width="100%" />
 
 <img src="assets/header.svg" alt="About me: R Harish Kumar, Cloud & DevOps Engineer" width="100%" />
 
@@ -18,7 +18,7 @@
 
 <img src="assets/headings/stack.svg" alt="Stack" width="100%" />
 
-<img src="assets/stack.svg" alt="Tech stack" width="100%" />
+<img src="assets/harbor.svg" alt="Tech stack as a night harbor: a crane loads a release container onto a ship" width="100%" />
 
 <img src="assets/art/journey.gif" alt="Journey: a car on a desert road at dusk" width="100%" />
 
