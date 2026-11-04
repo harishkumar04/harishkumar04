@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 76" width="480" height="76" role="img" aria-label="LINKEDIN: in/r-harish-kumar">
+<defs><style>text{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.ar{animation:ar 2.4s ease-in-out infinite}@keyframes ar{50%{transform:translate(3px,-3px)}}
+</style></defs>
+<rect x="1" y="1" width="478" height="74" rx="12" fill="#070b18" stroke="#1f2747"/>
+<rect x="18" y="14" width="48" height="48" rx="11" fill="#0a66c2"/><text x="42" y="47" text-anchor="middle" font-size="24" font-weight="700" fill="#ffffff">in</text>
+<text x="84" y="33" font-size="11" font-weight="700" letter-spacing="3" fill="#5ccfff">LINKEDIN</text>
+<text x="84" y="56" font-size="16" font-weight="700" fill="#f2f5ff">in/r-harish-kumar</text>
+<g class="ar"><text x="450" y="46" text-anchor="middle" font-size="20" fill="#5ccfff">↗</text></g>
+</svg>
