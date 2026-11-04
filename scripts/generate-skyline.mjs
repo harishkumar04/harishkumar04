@@ -12,7 +12,7 @@ const demo = process.argv.includes("--demo");
 
 const QUERY = `query($login:String!,$from:DateTime!,$to:DateTime!){
   user(login:$login){contributionsCollection(from:$from,to:$to){contributionCalendar{
-    weeks{firstContributionDate contributionDays{contributionCount}}}}}}`;
+    weeks{firstDay contributionDays{contributionCount}}}}}}`;
 
 async function fetchWeeks() {
   const to = new Date();
@@ -25,7 +25,7 @@ async function fetchWeeks() {
   const json = await res.json();
   if (!res.ok || json.errors) throw new Error("GitHub API error: " + JSON.stringify(json.errors || res.status));
   return json.data.user.contributionsCollection.contributionCalendar.weeks.map((w) => ({
-    start: w.firstContributionDate,
+    start: w.firstDay,
     count: w.contributionDays.reduce((a, d) => a + d.contributionCount, 0),
   }));
 }
