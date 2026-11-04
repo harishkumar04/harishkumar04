@@ -70,7 +70,11 @@ class Animator:
         sun = R["sun"]
         self.sun = (sun["x"] * W, sun["y"] * H, sun["r"] * W)
         sun_keep = np.clip(np.hypot(xs - self.sun[0], ys - self.sun[1]) / (self.sun[2] * 2.2) - 0.6, 0, 1)
-        self.clouds = [(poly_mask(W, H, c["poly"], 10 * s) * poly_mask(W, H, R["sky"], 6 * s) * sun_keep, c["amp"] * s, c["phase"]) for c in R["clouds"]]
+        keep_ships = np.ones((H, W), np.float32)
+        for d_ in R["distant_ships"]:
+            x0, y0, x1, y1 = d_["box"]
+            keep_ships *= 1 - box_mask(W, H, [x0 - 0.01, y0 - 0.03, x1 + 0.01, y1], 6 * s)
+        self.clouds = [(poly_mask(W, H, c["poly"], 10 * s) * poly_mask(W, H, R["sky"], 6 * s) * sun_keep * keep_ships, c["amp"] * s, c["phase"]) for c in R["clouds"]]
         self.ship = poly_mask(W, H, R["main_ship"], 4 * s)
         self.far = [(box_mask(W, H, d["box"], 2.5 * s), np.array(d["drift"]) * s) for d in R["distant_ships"]]
         c = R["container"]
