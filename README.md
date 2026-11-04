@@ -1,6 +1,4 @@
-<img src="assets/about/about.svg" alt="About me: R Harish Kumar, Cloud & DevOps Engineer in Chennai, India. Breaking, fixing and building scalable, reliable systems." width="100%" />
-
-<img src="https://raw.githubusercontent.com/harishkumar04/harishkumar04/output/header.svg" alt="Terminal: kubectl get engineer harish, current focus and what I'm building now" width="100%" />
+<img src="https://raw.githubusercontent.com/harishkumar04/harishkumar04/output/header.svg" alt="About me, as a terminal: R Harish Kumar, Cloud &amp; DevOps Engineer in Chennai. Breaking, fixing and building scalable, reliable systems. Plus what I'm building right now." width="100%" />
 
 <picture>
   <source media="(prefers-reduced-motion: reduce)" srcset="assets/shipping-harbor/shipping-harbor-static.png" />

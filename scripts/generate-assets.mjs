@@ -132,27 +132,6 @@ ${tags}
 `;
 }
 
-// ---------------------------------------------------------------- about me card
-function aboutCard() {
-  const W = 1000, H = 158;
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="About me: R Harish Kumar, Cloud and DevOps Engineer in Chennai, India. Breaking, fixing and building scalable, reliable systems.">
-<defs>
-<radialGradient id="glow" cx="1" cy="1" r="0.9"><stop offset="0" stop-color="#ff9a5a" stop-opacity=".16"/><stop offset="1" stop-color="#ff9a5a" stop-opacity="0"/></radialGradient>
-<style>${FONT}
-.in{animation:in 1s ease-out both}@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-.sq{animation:sq 1.4s steps(1) infinite}@keyframes sq{50%{opacity:.3}}
-</style></defs>
-<rect x="1" y="1" width="${W - 2}" height="${H - 2}" rx="12" fill="#070b18" stroke="#1f2747"/>
-<rect x="1" y="1" width="${W - 2}" height="${H - 2}" rx="12" fill="url(#glow)"/>
-<rect class="sq" x="32" y="27" width="9" height="9" fill="#5ccfff"/>
-<text x="50" y="36" font-size="13" font-weight="700" letter-spacing="4" fill="#5ccfff">ABOUT ME</text>
-<g class="in"><text x="32" y="80" font-size="27" font-weight="700" fill="#f2f5ff">R Harish Kumar</text>
-<text x="32" y="106" font-size="14" fill="#ffd479">Cloud &amp; DevOps Engineer · Chennai, India</text></g>
-<g class="in" style="animation-delay:.2s"><text x="32" y="136" font-size="14" fill="#9fb2e0">Breaking, fixing and building scalable, reliable systems.</text></g>
-</svg>
-`;
-}
-
 // ---------------------------------------------------------------- contact cards
 function contactCard(kind) {
   const W = 480, H = 76;
@@ -204,7 +183,7 @@ function header(now = DEFAULT_NOW) {
     { kind: "out", parts: [[pad("NAME", 16) + pad("ROLE", 26) + pad("STATUS", 10) + "REGION", C.dim]] },
     { kind: "out", parts: [[pad("r-harish-kumar", 16), C.out], [pad("Cloud & DevOps Engineer", 26), C.out], [pad("Running", 10), C.ok], ["chennai", C.out]] },
     { kind: "cmd", parts: [["$ ", C.prompt], ["cat focus.txt", C.cmd]] },
-    { kind: "out", parts: [["aws · kubernetes · terraform · ci/cd · observability", C.cyan]] },
+    { kind: "out", parts: [["Breaking, fixing and building scalable, reliable systems.", C.cyan]] },
     { kind: "cmd", parts: [["$ ", C.prompt], ["echo $CURRENTLY_BUILDING", C.cmd]] },
     { kind: "out", parts: [["▸ ", C.ok], [clip(now.repo, 28), C.prompt], [" · ", C.dim], [clip(now.msg, Math.max(12, 62 - Math.min(now.repo.length, 28))), C.out]] },
   ];
@@ -269,7 +248,7 @@ function header(now = DEFAULT_NOW) {
 <rect class="load" x="${PX + 104}" y="${BY - 12}" width="${BW - 104}" height="10" rx="5" fill="#5ccfff"/>
 <rect x="${PX + 104 + (BW - 104) * 0.7}" y="${BY - 15}" width="1.5" height="16" fill="#ffd479"/>`;
 
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="About me: R Harish Kumar, Cloud and DevOps Engineer, Chennai. Focus: AWS, Kubernetes, Terraform, CI/CD, observability.">
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="About me: R Harish Kumar, Cloud and DevOps Engineer, Chennai. Breaking, fixing and building scalable, reliable systems.">
 <defs><style>${FONT}${css}
 .blink{animation:bl 1s steps(1) infinite}@keyframes bl{50%{opacity:0}}
 .txt{animation:fade ${T}s infinite}@keyframes fade{0%,93%{opacity:1}98%,100%{opacity:0}}
@@ -302,13 +281,11 @@ if (LIVE) {
   PROJECTS.forEach((p, i) => writeFileSync(`assets/projects/${p.slug}.svg`, projectCard(p, i)));
   mkdirSync("assets/headings", { recursive: true });
   for (const [f, l] of [["projects", "FEATURED PROJECTS"], ["contributions", "CONTRIBUTIONS"], ["connect", "CONNECT"]]) writeFileSync(`assets/headings/${f}.svg`, heading(l));
-  mkdirSync("assets/about", { recursive: true });
-  writeFileSync("assets/about/about.svg", aboutCard());
   mkdirSync("assets/contact", { recursive: true });
   for (const k of ["linkedin", "email"]) writeFileSync(`assets/contact/${k}.svg`, contactCard(k));
   // local previews of the dynamic images
   mkdirSync(OUT, { recursive: true });
   const demo = { repo: "Jenkins-RCA-Agent", msg: "route docker failures to the devops team", date: new Date().toISOString() };
   writeFileSync(`${OUT}/header.svg`, header(demo));
-  console.log(`Wrote assets/about, assets/contact, assets/projects, assets/headings and previews in ${OUT}/`);
+  console.log(`Wrote assets/contact, assets/projects, assets/headings and previews in ${OUT}/`);
 }

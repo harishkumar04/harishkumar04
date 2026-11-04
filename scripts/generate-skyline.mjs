@@ -137,7 +137,6 @@ function render(weeksIn) {
     g += gr("fb", parts.fb, "#ffd479", `style="animation-delay:-${(r() * 5).toFixed(2)}s"`);
     city += `<g>${g}</g>`;
 
-    labels += `<text x="${cx.toFixed(1)}" y="${roof - (style === "spire" ? 36 : 8)}" text-anchor="middle" font-size="9" fill="#7f8fb8">${wk.count}</text>`;
 
     if (wk.start) {
       const m = MONTHS[parseInt(wk.start.slice(5, 7), 10) - 1];
