@@ -1,109 +1,80 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0f2027,50:203a43,100:2c5364&height=230&section=header&text=Hi%2C%20I'm%20R%20Harish%20Kumar&fontSize=46&fontColor=ffffff&animation=fadeIn&fontAlignY=38&desc=Cloud%20%7C%20DevOps%20%7C%20Automation&descAlignY=58&descSize=20" alt="Banner" />
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:04060e,60:0d1330,100:2b2150&height=200&section=header&text=R%20Harish%20Kumar&fontSize=48&fontColor=eaf1ff&animation=fadeIn&fontAlignY=36&desc=Cloud%20%26%20DevOps%20Engineer%20%C2%B7%20AWS%20Certified&descAlignY=58&descSize=18" alt="R Harish Kumar" />
 
 <a href="https://git.io/typing-svg">
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=24&duration=3000&pause=1000&color=00F7FF&center=true&vCenter=true&width=760&lines=Building+reliable+infrastructure+on+AWS+%E2%98%81%EF%B8%8F;Shipping+on+Kubernetes+%26+EKS+%E2%8E%88;Terraform+everything.+Automate+the+rest.+%E2%9A%99%EF%B8%8F;Observability+nerd%3A+Prometheus+%7C+Grafana+%7C+Loki+%F0%9F%93%88" alt="Typing SVG" />
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=500&size=20&duration=3200&pause=1200&color=FFD479&center=true&vCenter=true&width=720&lines=The+city+never+sleeps.+Neither+do+my+pipelines.;Every+window+lit+%3D+a+commit+shipped.;Kubernetes+%C2%B7+Terraform+%C2%B7+AWS+%C2%B7+Observability" alt="Typing SVG" />
 </a>
-
-<br/>
-
-<img src="https://komarev.com/ghpvc/?username=harishkumar04&label=Profile%20views&color=00f7ff&style=for-the-badge" alt="Profile views" />
-<img src="https://img.shields.io/github/followers/harishkumar04?style=for-the-badge&logo=github&color=0d1117&labelColor=00f7ff" alt="Followers" />
-
-</div>
-
----
-
-## 👨‍💻 About Me
-
-```yaml
-role:        Cloud & DevOps Engineer
-focus:       [AWS, Kubernetes/EKS, Terraform, CI/CD, Observability]
-mission:     "If I do it twice, I automate it."
-currently:   Levelling up on Go, Spring Boot and React (3D web experiences)
-fun_fact:    I enjoy fixing production issues more than I should
-```
-
-- 🔭 Designing and running **cloud-native infrastructure** on AWS
-- 🔐 Automating the boring-but-critical stuff, like **SSL/TLS renewals with cert-manager**
-- 🚀 Building **CI/CD pipelines** that ship fast and fail loudly
-- 🌱 Learning **Go**, **Spring Boot** and **React** through hands-on projects
-
----
-
-## 🛠️ Tech Stack
-
-<div align="center">
-
-**Cloud & Infrastructure**
-
-<img src="https://skillicons.dev/icons?i=aws,kubernetes,docker,terraform,linux,bash,nginx&theme=dark" alt="Infra" />
-<img src="https://img.shields.io/badge/Helm-0F1689?style=for-the-badge&logo=helm&logoColor=white" alt="Helm" />
-
-**CI/CD & Observability**
-
-<img src="https://skillicons.dev/icons?i=jenkins,githubactions,git,prometheus,grafana,postgres&theme=dark" alt="CI/CD" />
-<img src="https://img.shields.io/badge/Loki-F46800?style=for-the-badge&logo=grafana&logoColor=white" alt="Loki" />
-
-**Currently Learning**
-
-<img src="https://skillicons.dev/icons?i=go,spring,react,threejs&theme=dark" alt="Learning" />
-
-</div>
-
----
-
-## 📊 GitHub Stats
-
-<div align="center">
-
-<img height="180" src="https://github-readme-stats.vercel.app/api?username=harishkumar04&show_icons=true&theme=tokyonight&hide_border=true&bg_color=0D1117" alt="GitHub stats" />
-<img height="180" src="https://github-readme-stats.vercel.app/api/top-langs/?username=harishkumar04&layout=compact&theme=tokyonight&hide_border=true&bg_color=0D1117" alt="Top languages" />
-
-<img src="https://streak-stats.demolab.com?user=harishkumar04&theme=tokyonight&hide_border=true&background=0D1117" alt="Streak stats" />
-
-</div>
-
----
-
-## 📈 Contribution Graph
-
-<div align="center">
-
-<img src="https://github-readme-activity-graph.vercel.app/graph?username=harishkumar04&theme=tokyo-night&hide_border=true&area=true&bg_color=0D1117" alt="Activity graph" />
-
-<br/>
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/harishkumar04/harishkumar04/output/github-snake-dark.svg" />
-  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/harishkumar04/harishkumar04/output/github-snake.svg" />
-  <img alt="Contribution snake animation" src="https://raw.githubusercontent.com/harishkumar04/harishkumar04/output/github-snake-dark.svg" />
-</picture>
-
-</div>
-
----
-
-## 🚀 Featured Projects
-
-| Project | What it does | Stack |
-|---|---|---|
-| [**End-to-End-Devops-Pipeline**](https://github.com/harishkumar04/End-to-End-Devops-Pipeline) | End-to-end CI/CD on AWS EKS with Jenkins, Docker and Helm, plus Prometheus/Grafana/Loki observability | `Jenkins` `Kubernetes` `Helm` `AWS EKS` |
-| [**Jenkins-RCA-Agent**](https://github.com/harishkumar04/Jenkins-RCA-Agent) | AI agent that analyses failed Jenkins builds and generates root-cause reports and email alerts | `Python` `FastAPI` `GPT-4o-mini` `Docker` |
-| [**RAG-Chatbot-using-AWS-Bedrock**](https://github.com/harishkumar04/RAG-Chatbot-using-AWS-Bedrock) | RAG chatbot answering questions from uploaded documents using Bedrock and vector search | `AWS Bedrock` `S3` `OpenSearch Serverless` |
-
----
-
-## 📫 Let's Connect
-
-<div align="center">
-
-<a href="https://www.linkedin.com/in/r-harish-kumar"><img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" /></a>
-<a href="mailto:rharish0909@gmail.com"><img src="https://img.shields.io/badge/Email-EA4335?style=for-the-badge&logo=gmail&logoColor=white" alt="Email" /></a>
 
 <br/><br/>
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:2c5364,50:203a43,100:0f2027&height=120&section=footer" alt="Footer" />
+<img src="https://raw.githubusercontent.com/harishkumar04/harishkumar04/output/skyline.svg" alt="New York skyline at night, one building per week of my GitHub contributions" width="100%" />
+
+<sub>🌃 <i>Each building is one week of my GitHub activity over the last 20 weeks. The tallest tower is my best week. Rebuilt every 6 hours.</i></sub>
+
+</div>
+
+---
+
+### 🌙 After hours
+
+```yaml
+name:      R Harish Kumar
+based_in:  Chennai, India
+role:      DevOps Intern @ Justo Global
+studying:  B.Tech CSE & Business Systems, VIT-AP (2026), CGPA 9.01
+certified: AWS Certified Cloud Practitioner
+builds:    [CI/CD pipelines, Kubernetes on EKS, observability stacks, AI-for-ops tools]
+motto:     "If I do it twice, I automate it."
+```
+
+---
+
+### 🏙️ Featured projects
+
+| | Project | What it does |
+|---|---|---|
+| 🏗️ | [**End-to-End-Devops-Pipeline**](https://github.com/harishkumar04/End-to-End-Devops-Pipeline) | End-to-end CI/CD on AWS EKS with Jenkins, Docker and Helm, plus Prometheus/Grafana/Loki observability |
+| 🚨 | [**Jenkins-RCA-Agent**](https://github.com/harishkumar04/Jenkins-RCA-Agent) | AI agent that analyses failed Jenkins builds and generates root-cause reports and email alerts |
+| 💬 | [**RAG-Chatbot-using-AWS-Bedrock**](https://github.com/harishkumar04/RAG-Chatbot-using-AWS-Bedrock) | RAG chatbot answering questions from uploaded documents using Bedrock and vector search |
+
+---
+
+### 🔧 Toolbox
+
+<div align="center">
+
+<img src="https://skillicons.dev/icons?i=aws,kubernetes,docker,terraform,jenkins,githubactions,prometheus,grafana&theme=dark" alt="Cloud and DevOps tools" />
+<br/>
+<img src="https://skillicons.dev/icons?i=linux,git,python,java,c,mysql,postgres&theme=dark" alt="Languages and databases" />
+<br/>
+<img src="https://img.shields.io/badge/Helm-0F1689?style=flat-square&logo=helm&logoColor=white" alt="Helm" />
+<img src="https://img.shields.io/badge/Loki-F46800?style=flat-square&logo=grafana&logoColor=white" alt="Loki" />
+<img src="https://img.shields.io/badge/AWS%20Bedrock-232F3E?style=flat-square&logo=amazonwebservices&logoColor=white" alt="AWS Bedrock" />
+<img src="https://img.shields.io/badge/ELK%20Stack-005571?style=flat-square&logo=elastic&logoColor=white" alt="ELK Stack" />
+
+</div>
+
+---
+
+### 📡 Signal
+
+<div align="center">
+
+<img height="165" src="https://github-readme-stats.vercel.app/api?username=harishkumar04&show_icons=true&hide_border=true&bg_color=04060e&title_color=ffd479&icon_color=5ff3ff&text_color=cfe0ff" alt="GitHub stats" />
+<img height="165" src="https://github-readme-stats.vercel.app/api/top-langs/?username=harishkumar04&layout=compact&hide_border=true&bg_color=04060e&title_color=ffd479&text_color=cfe0ff" alt="Top languages" />
+
+</div>
+
+---
+
+<div align="center">
+
+**Say hi, the lights are on.**
+
+<a href="https://www.linkedin.com/in/r-harish-kumar"><img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" /></a>
+<a href="mailto:rharish0909@gmail.com"><img src="https://img.shields.io/badge/Email-1a2142?style=for-the-badge&logo=gmail&logoColor=ffd479" alt="Email" /></a>
+
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:2b2150,40:0d1330,100:04060e&height=110&section=footer" alt="" />
 
 </div>

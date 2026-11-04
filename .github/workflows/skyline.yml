@@ -1,0 +1,38 @@
+name: Generate Skyline
+
+on:
+  schedule:
+    - cron: "17 */6 * * *" # every 6 hours, so "this week" stays current
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ["scripts/generate-skyline.mjs", ".github/workflows/skyline.yml"]
+
+permissions:
+  contents: write
+
+jobs:
+  skyline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Build skyline from contribution data
+        run: node scripts/generate-skyline.mjs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_LOGIN: ${{ github.repository_owner }}
+          OUT: dist/skyline.svg
+
+      - name: Publish to output branch
+        uses: crazy-max/ghaction-github-pages@v4
+        with:
+          target_branch: output
+          build_dir: dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
