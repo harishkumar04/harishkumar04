@@ -19,10 +19,6 @@
 
 <img src="assets/art/waterfall.gif" alt="Pixel-art waterfall in a forest" width="100%" />
 
-<img src="assets/headings/stack.svg" alt="Stack" width="100%" />
-
-<img src="https://raw.githubusercontent.com/harishkumar04/harishkumar04/output/harbor.svg" alt="Tech stack as a night harbor: a crane loads a release container onto a ship" width="100%" />
-
 <img src="assets/art/journey.gif" alt="Journey: a car on a desert road at dusk" width="100%" />
 
 <img src="assets/headings/connect.svg" alt="Connect" width="100%" />

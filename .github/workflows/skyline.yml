@@ -34,7 +34,7 @@ jobs:
           GH_LOGIN: ${{ github.repository_owner }}
           OUT: dist/skyline.svg
 
-      - name: Build live header and harbor (latest pushed repo)
+      - name: Build live terminal header (latest pushed repo)
         run: node scripts/generate-assets.mjs --live --out dist
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
