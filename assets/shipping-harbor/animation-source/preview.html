@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shipping Harbor</title>
+<style>
+  :root { --panel-bg: rgba(12, 18, 42, .48); --panel-border: rgba(255, 255, 255, .16); --text: #e6ebf5; --ok: #5fd38d; }
+  body { margin: 0; background: #0d1117; display: grid; place-items: center; min-height: 100vh; padding: 16px; box-sizing: border-box; }
+  .banner { position: relative; width: min(100%, 1200px); aspect-ratio: 3 / 1; overflow: hidden; border-radius: 10px; }
+  .banner img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  /* status panel: small glass overlay, kept clear of the main artwork */
+  .panel {
+    position: absolute; top: 2.5%; left: 1%; padding: .55em .85em .5em; border-radius: 7px;
+    background: var(--panel-bg); border: 1px solid var(--panel-border);
+    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    font: 500 clamp(7px, .95vw, 11px)/1.35 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    color: var(--text); letter-spacing: .08em;
+  }
+  .label { opacity: .8; }
+  .time { font-size: 2.15em; font-weight: 700; letter-spacing: .05em; color: #f6f2ea; font-variant-numeric: tabular-nums; }
+  .status { display: flex; align-items: center; gap: .55em; opacity: .85; font-size: .9em; }
+  .dot { width: .5em; height: .5em; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 0 rgba(95, 211, 141, .6); animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(95, 211, 141, .55); } 50% { box-shadow: 0 0 0 .45em rgba(95, 211, 141, 0); } }
+  @media (prefers-reduced-motion: reduce) { .dot { animation: none; } }
+</style>
+</head>
+<body>
+  <!--
+    Countdown configuration
+    - data-duration: length of one "shipment" cycle as HH:MM:SS (default 04:32:18)
+    - ?duration=HH:MM:SS in the URL overrides it
+    Reset mechanism: when the countdown reaches 00:00:00 it immediately restarts from the
+    configured duration (the next "shipment"). Reloading the page also restarts it.
+    This is a decorative countdown, not a real shipment schedule.
+  -->
+  <div class="banner">
+    <img src="../shipping-harbor-static.png" alt="Anime-style shipping harbor at sunset">
+    <div class="panel" id="panel" data-duration="04:32:18" aria-live="off">
+      <div class="label">NEXT SHIPMENT IN</div>
+      <div class="time" id="time">04:32:18</div>
+      <div class="status"><span class="dot"></span>SYSTEM STATUS: OPERATIONAL</div>
+    </div>
+  </div>
+<script>
+  (function () {
+    const panel = document.getElementById('panel'), out = document.getElementById('time');
+    const parse = (s) => { const p = String(s).split(':').map(Number); return p.length === 3 && p.every(Number.isFinite) ? p[0] * 3600 + p[1] * 60 + p[2] : null; };
+    const fmt = (v) => [Math.floor(v / 3600), Math.floor(v / 60) % 60, v % 60].map((n) => String(n).padStart(2, '0')).join(':');
+    const duration = parse(new URLSearchParams(location.search).get('duration')) ?? parse(panel.dataset.duration) ?? 16338;
+    let end = Date.now() + duration * 1000;
+    function tick() {
+      let left = Math.ceil((end - Date.now()) / 1000);
+      if (left <= 0) { end = Date.now() + duration * 1000; left = duration; }   // reset: next shipment
+      out.textContent = fmt(left);
+    }
+    tick(); setInterval(tick, 1000);
+  })();
+</script>
+</body>
+</html>

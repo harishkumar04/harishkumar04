@@ -1,8 +1,8 @@
 <div align="center">
 
 <picture>
-  <source media="(prefers-reduced-motion: reduce)" srcset="assets/banner/shipping-harbor-static.png" />
-  <img src="assets/banner/shipping-harbor.gif" alt="Sunset harbor: a crane loads containers onto a docked cargo ship while other ships sail toward the setting sun" width="100%" />
+  <source media="(prefers-reduced-motion: reduce)" srcset="assets/shipping-harbor/shipping-harbor-static.png" />
+  <img src="assets/shipping-harbor/shipping-harbor.gif" alt="Anime-style shipping harbor at sunset: a crane holds a container over a docked cargo ship while ships sail toward the setting sun" width="100%" />
 </picture>
 
 <img src="https://raw.githubusercontent.com/harishkumar04/harishkumar04/output/header.svg" alt="About me: R Harish Kumar, Cloud & DevOps Engineer" width="100%" />
