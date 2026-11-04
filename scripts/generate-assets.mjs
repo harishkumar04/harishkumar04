@@ -183,21 +183,54 @@ function header(now = DEFAULT_NOW) {
   css += `@keyframes fin{0%,${pct(t)}%{opacity:0}${(+pct(t) + 0.01).toFixed(2)}%,100%{opacity:1}}`;
   lines += `<g style="animation:fin ${T}s infinite"><text x="${X}" y="${yf}" font-size="${FS}" fill="${C.prompt}">$</text><rect class="blink" x="${X + 2 * CW}" y="${yf - 14}" width="${CW}" height="18" fill="${C.cyan}"/></g>`;
 
-  // right panel: a rollout of pods turning green
-  let pods = "";
-  const PX = 700, PY = 96, S = 30, G = 10;
-  for (let r = 0; r < 4; r++)
-    for (let c = 0; c < 6; c++) {
-      const k = r * 6 + c;
-      pods += `<rect class="pod" style="animation-delay:${(k * 0.12).toFixed(2)}s" x="${PX + c * (S + G)}" y="${PY + r * (S + G)}" width="${S}" height="${S}" rx="6"/>`;
-    }
+  // right panel: an autoscaler scaling the "skills" deployment out in waves (HPA),
+  // with resource requests growing alongside (VPA). Loops with the terminal (T seconds).
+  const PX = 690, PY = 112, S = 26, G = 8;
+  const REP = [3, 6, 12, 18, 24], TS = [0, 3.4, 6.8, 10.2, 13.6], DOWN = 18.0;
+  const MEM = ["256Mi", "512Mi", "1Gi", "2Gi", "4Gi"];
+  const P = (sec) => ((sec / T) * 100).toFixed(2);
+  let pods = "", hpaCss = "";
+  for (let k = 0; k < 24; k++) {
+    const r0 = Math.floor(k / 6), c0 = k % 6, x = PX + c0 * (S + G), y = PY + r0 * (S + G);
+    const st = REP.findIndex((n) => k < n);
+    if (st === 0) { pods += `<rect x="${x}" y="${y}" width="${S}" height="${S}" rx="5" fill="#3ddc84"/>`; continue; }
+    const a = TS[st] + 0.5 + (k - REP[st - 1]) * 0.07;
+    hpaCss += `@keyframes p${k}{0%,${P(a)}%{opacity:0;fill:#ffb347}${P(a + 0.15)}%{opacity:1;fill:#ffb347}${P(a + 0.9)}%,${P(DOWN)}%{opacity:1;fill:#3ddc84}${P(DOWN + 1)}%,100%{opacity:0;fill:#3ddc84}}`;
+    pods += `<rect x="${x}" y="${y}" width="${S}" height="${S}" rx="5" fill="#141a33"/><rect style="animation:p${k} ${T}s infinite" x="${x}" y="${y}" width="${S}" height="${S}" rx="5"/>`;
+  }
+  // per-stage texts (only one visible at a time)
+  const stageText = (i, body) => {
+    const from = i === 0 ? 0 : TS[i] + 0.4, to = i === REP.length - 1 ? DOWN : TS[i + 1] + 0.4;
+    hpaCss += `@keyframes s${i}{0%{opacity:${i === 0 ? 1 : 0}}${P(Math.max(0.01, from))}%{opacity:${i === 0 ? 1 : 0}}${P(from + 0.3)}%,${P(to)}%{opacity:1}${P(to + 0.3)}%,100%{opacity:0}}`;
+    if (i === 0) hpaCss += `@keyframes s0b{0%,${P(DOWN + 0.8)}%{opacity:0}${P(DOWN + 1.2)}%,100%{opacity:1}}`;
+    return `<g style="animation:s${i} ${T}s infinite">${body}</g>` + (i === 0 ? `<g style="animation:s0b ${T}s infinite">${body}</g>` : "");
+  };
+  let stages = "";
+  REP.forEach((n, i) => {
+    const ev = i === 0 ? "steady · waiting for load" : i === REP.length - 1 ? `scaled ${REP[i - 1]} → ${n} · max reached` : `scaled ${REP[i - 1]} → ${n} · load 92% > 70%`;
+    stages += stageText(i, `<text x="${PX}" y="100" font-size="12" fill="#cfe0ff">replicas <tspan fill="#3ddc84" font-weight="700">${n}</tspan><tspan fill="#56648f">/24</tspan></text>
+<text x="${PX}" y="${PY + 4 * (S + G) + 50}" font-size="10.5" fill="#8a96bd">${i === 0 ? "○" : "↑"} ${ev}</text>
+<text x="${PX}" y="${PY + 4 * (S + G) + 68}" font-size="10.5" fill="#8a96bd">vpa · requests <tspan fill="#ffd479">${i === 0 ? MEM[0] : MEM[i - 1] + " → " + MEM[i]}</tspan></text>`);
+  });
+  // learning-load bar: climbs past the 70% target, drops after each scale-out
+  const BW = 196, BY = PY + 4 * (S + G) + 14;
+  let kf = "0%{transform:scaleX(.45)}";
+  TS.forEach((t0, i) => {
+    if (i === 0) return;
+    kf += `${P(t0 - 0.05)}%{transform:scaleX(.92)}${P(t0 + 0.9)}%{transform:scaleX(.5)}`;
+  });
+  kf += `${P(DOWN)}%{transform:scaleX(.62)}${P(DOWN + 1)}%{transform:scaleX(.45)}100%{transform:scaleX(.45)}`;
+  hpaCss += `.load{transform-box:fill-box;transform-origin:left center;animation:load ${T}s ease-in-out infinite}@keyframes load{${kf}}`;
+  const bar = `<text x="${PX}" y="${BY - 4}" font-size="10" letter-spacing="1" fill="#56648f">LEARNING LOAD</text>
+<rect x="${PX + 104}" y="${BY - 12}" width="${BW - 104}" height="10" rx="5" fill="#ffffff" fill-opacity=".05"/>
+<rect class="load" x="${PX + 104}" y="${BY - 12}" width="${BW - 104}" height="10" rx="5" fill="#5ccfff"/>
+<rect x="${PX + 104 + (BW - 104) * 0.7}" y="${BY - 15}" width="1.5" height="16" fill="#ffd479"/>`;
 
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="About me: R Harish Kumar, Cloud and DevOps Engineer, Chennai. Focus: AWS, Kubernetes, Terraform, CI/CD, observability.">
 <defs><style>${FONT}${css}
 .blink{animation:bl 1s steps(1) infinite}@keyframes bl{50%{opacity:0}}
 .txt{animation:fade ${T}s infinite}@keyframes fade{0%,93%{opacity:1}98%,100%{opacity:0}}
-.pod{fill:#141a33;animation:pod 9s ease-in-out infinite}
-@keyframes pod{0%,8%{fill:#141a33}14%{fill:#ffb347}22%,88%{fill:#3ddc84}96%,100%{fill:#141a33}}
+${hpaCss}
 </style></defs>
 <rect x="1" y="1" width="${W - 2}" height="${H - 2}" rx="12" fill="#070b18" stroke="#1f2747"/>
 <path d="M1 13a12 12 0 0 1 12-12h${W - 26}a12 12 0 0 1 12 12v23H1z" fill="#0d1226"/>
@@ -205,9 +238,10 @@ function header(now = DEFAULT_NOW) {
 <text x="${W / 2}" y="23" text-anchor="middle" font-size="12" fill="#56648f">harish@cloud: ~</text>
 <g class="txt">${lines}</g>
 <line x1="660" y1="62" x2="660" y2="${H - 24}" stroke="#1a2142"/>
-<text x="${PX}" y="78" font-size="11" letter-spacing="1.5" fill="#56648f">deployment/harish</text>
+<text x="${PX}" y="78" font-size="11" letter-spacing="1.5" fill="#56648f">hpa/harish-skills</text>
+${stages}
 ${pods}
-<text x="${PX}" y="${PY + 4 * (S + G) + 16}" font-size="12" fill="#3ddc84">● 24/24 pods ready</text>
+${bar}
 </svg>
 `;
 }
