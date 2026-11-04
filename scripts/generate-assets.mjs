@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Generates the static, animated README assets: neon project billboards and the
-// subway-map toolbox and the header. Run once after editing the data below:
+// stack ticker, section headings and the header. Run once after editing the data below:
 //   node scripts/generate-assets.mjs
 import { writeFileSync, mkdirSync } from "node:fs";
 
@@ -107,53 +107,65 @@ ${tags}
 `;
 }
 
-// ---------------------------------------------------------------- subway toolbox
-const LINES = [
-  { bullet: "I", name: "INFRA", color: "#ff6319", stops: ["AWS", "Terraform", "CloudFormation", "Docker", "Kubernetes", "Helm"] },
-  { bullet: "D", name: "DELIVERY", color: "#2f6fe4", stops: ["Git", "GitHub Actions", "Jenkins", "CodeBuild", "CodeDeploy", "CodePipeline"] },
-  { bullet: "O", name: "OBSERVE", color: "#00b35a", stops: ["Prometheus", "Grafana", "Loki", "ELK Stack", "Zabbix"] },
-  { bullet: "A", name: "AI & DATA", color: "#fccc0a", stops: ["Bedrock", "OpenSearch", "Python", "Java", "MySQL", "PostgreSQL"] },
+// ---------------------------------------------------------------- stack ticker
+const ROWS = [
+  ["AWS", "Kubernetes", "Docker", "Terraform", "Helm", "Jenkins", "GitHub Actions", "CloudFormation", "Linux"],
+  ["Prometheus", "Grafana", "Loki", "ELK Stack", "AWS Bedrock", "OpenSearch", "Python", "Java", "PostgreSQL", "MySQL"],
 ];
 
-function subway() {
-  const W = 1000, ROW = 74, TOP = 34, H = TOP + LINES.length * ROW + 6;
-  const X0 = 190, X1 = 935;
-  let body = "";
-  LINES.forEach((ln, i) => {
-    const y = TOP + i * ROW + 34;
-    const dark = ln.color === "#fccc0a" ? "#0b1022" : "#fff";
-    body += `<circle cx="40" cy="${y}" r="17" fill="${ln.color}"/><text x="40" y="${y + 6}" text-anchor="middle" font-size="18" font-weight="700" fill="${dark}">${ln.bullet}</text>`;
-    body += `<text x="68" y="${y + 5}" font-size="12" letter-spacing="2" fill="#7f8fb8">${esc(ln.name)}</text>`;
-    body += `<line x1="${X0}" y1="${y}" x2="${X1}" y2="${y}" stroke="${ln.color}" stroke-width="6" stroke-linecap="round" opacity=".9"/>`;
-    const step = (X1 - X0 - 40) / (ln.stops.length - 1);
-    ln.stops.forEach((s, k) => {
-      const x = X0 + 20 + k * step;
-      body += `<circle cx="${x}" cy="${y}" r="7" fill="#eaf1ff" stroke="#0b1022" stroke-width="2.5"/>`;
-      body += `<text x="${x}" y="${y - 15}" text-anchor="middle" font-size="12" fill="#cfe0ff">${esc(s)}</text>`;
-    });
-    // train
-    const dur = 9 + i * 2.3;
-    body += `<g class="train" style="--d:${dur}s;animation-delay:-${(i * 2.7).toFixed(1)}s"><g transform="translate(${X0} ${y})">
-<rect x="-2" y="-7" width="40" height="14" rx="7" fill="#eaf1ff"/><rect x="3" y="-4" width="6" height="5" rx="1" fill="${ln.color}"/><rect x="12" y="-4" width="6" height="5" rx="1" fill="${ln.color}"/><rect x="21" y="-4" width="6" height="5" rx="1" fill="${ln.color}"/>
-<circle cx="35" cy="0" r="2" fill="#fff6c9" class="hl"/></g></g>`;
+function ticker() {
+  const W = 1000, H = 96, CH = 8.4, GAP = 26;
+  let rows = "", css = "";
+  ROWS.forEach((items, ri) => {
+    const y = 38 + ri * 34;
+    // fixed positions so the loop seam is exact regardless of font
+    const pos = [];
+    let x = 0;
+    for (const it of items) { pos.push([x, it]); x += it.length * CH + GAP * 2; }
+    const period = x;
+    let g = "";
+    for (let rep = 0; rep * period < W + period; rep++)
+      for (const [px, it] of pos) {
+        const ox = px + rep * period;
+        g += `<text x="${ox.toFixed(1)}" y="${y}" font-size="14" fill="#cfe0ff">${esc(it)}</text>`;
+        g += `<circle cx="${(ox + it.length * CH + GAP).toFixed(1)}" cy="${y - 5}" r="2" fill="#ffd479"/>`;
+      }
+    const dur = (period / 28).toFixed(1);
+    css += `.r${ri}{animation:m${ri} ${dur}s linear infinite}@keyframes m${ri}{from{transform:translateX(${ri ? -period : 0}px)}to{transform:translateX(${ri ? 0 : -period}px)}}`;
+    rows += `<g class="r${ri}">${g}</g>`;
   });
-
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Toolbox drawn as a subway map">
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Tech stack: ${ROWS.flat().join(", ")}">
 <defs>
-<linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#070b18"/><stop offset="1" stop-color="#0e1430"/></linearGradient>
-<pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0H0V24" fill="none" stroke="#ffffff" stroke-opacity=".03"/></pattern>
-<style>${FONT}
-.train{animation:ride var(--d) ease-in-out infinite alternate}@keyframes ride{from{transform:translateX(0)}to{transform:translateX(${X1 - X0 - 38}px)}}
-.hl{animation:hl 1.2s ease-in-out infinite}@keyframes hl{50%{opacity:.3}}
-</style>
+<linearGradient id="fl" x1="0" x2="1"><stop offset="0" stop-color="#070b18"/><stop offset="1" stop-color="#070b18" stop-opacity="0"/></linearGradient>
+<linearGradient id="fr" x1="1" x2="0"><stop offset="0" stop-color="#070b18"/><stop offset="1" stop-color="#070b18" stop-opacity="0"/></linearGradient>
+<clipPath id="c"><rect width="${W}" height="${H}" rx="14"/></clipPath>
+<style>${FONT}${css}</style>
 </defs>
-<rect width="${W}" height="${H}" rx="14" fill="url(#bg)"/>
-<rect width="${W}" height="${H}" rx="14" fill="url(#grid)"/>
-${body}
+<rect width="${W}" height="${H}" rx="14" fill="#070b18" stroke="#1a2142"/>
+<g clip-path="url(#c)">${rows}</g>
+<rect x="0" y="1" width="120" height="${H - 2}" fill="url(#fl)"/>
+<rect x="${W - 120}" y="1" width="120" height="${H - 2}" fill="url(#fr)"/>
 </svg>
 `;
 }
 
+// ---------------------------------------------------------------- section headings
+function heading(label) {
+  const W = 1000, H = 48, y = 30, tw = label.length * 9 * 1.0 + (label.length - 1) * 4;
+  const x0 = 26 + tw + 22;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${esc(label)}">
+<defs><style>${FONT}
+.sq{animation:sq 1.4s steps(1) infinite}@keyframes sq{50%{opacity:.25}}
+.ln{stroke-dasharray:${W};stroke-dashoffset:${W};animation:ln 1.6s .2s ease-out forwards}@keyframes ln{to{stroke-dashoffset:0}}
+.dot{animation:dot 6s ease-in-out infinite}@keyframes dot{0%{transform:translateX(0);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateX(${(W - x0 - 4).toFixed(0)}px);opacity:0}}
+</style></defs>
+<rect class="sq" x="2" y="${y - 11}" width="10" height="10" fill="#5ccfff"/>
+<text x="26" y="${y}" font-size="15" font-weight="700" letter-spacing="4" fill="#5ccfff">${esc(label)}</text>
+<line class="ln" x1="${x0.toFixed(0)}" y1="${y - 6}" x2="${W}" y2="${y - 6}" stroke="#232b52" stroke-width="1.5"/>
+<circle class="dot" cx="${x0.toFixed(0)}" cy="${y - 6}" r="2.5" fill="#5ccfff"/>
+</svg>
+`;
+}
 
 // ---------------------------------------------------------------- header
 function header() {
@@ -185,6 +197,8 @@ function header() {
 
 mkdirSync("assets/projects", { recursive: true });
 PROJECTS.forEach((p, i) => writeFileSync(`assets/projects/${p.slug}.svg`, projectCard(p, i)));
-writeFileSync("assets/toolbox.svg", subway());
+writeFileSync("assets/stack.svg", ticker());
+mkdirSync("assets/headings", { recursive: true });
+for (const [f, l] of [["projects", "FEATURED PROJECTS"], ["stack", "STACK"], ["connect", "CONNECT"]]) writeFileSync(`assets/headings/${f}.svg`, heading(l));
 writeFileSync("assets/header.svg", header());
-console.log("Wrote assets/projects/*.svg and assets/toolbox.svg");
+console.log("Wrote assets/header.svg, assets/stack.svg, assets/projects/*.svg, assets/headings/*.svg");

@@ -12,31 +12,21 @@
 
 </div>
 
----
-
-### 🏙️ Featured projects
+<img src="assets/headings/projects.svg" alt="Featured projects" width="100%" />
 
 <a href="https://github.com/harishkumar04/End-to-End-Devops-Pipeline"><img src="assets/projects/devops-pipeline.svg" alt="End-to-End-Devops-Pipeline" width="100%" /></a>
 <a href="https://github.com/harishkumar04/Jenkins-RCA-Agent"><img src="assets/projects/jenkins-rca-agent.svg" alt="Jenkins-RCA-Agent" width="100%" /></a>
 <a href="https://github.com/harishkumar04/RAG-Chatbot-using-AWS-Bedrock"><img src="assets/projects/rag-chatbot-bedrock.svg" alt="RAG-Chatbot-using-AWS-Bedrock" width="100%" /></a>
 
----
 
-### 🔧 Toolbox
+<img src="assets/headings/stack.svg" alt="Stack" width="100%" />
 
-<img src="assets/toolbox.svg" alt="Toolbox: Infra, Delivery, Observability, AI and data" width="100%" />
+<img src="assets/stack.svg" alt="Tech stack" width="100%" />
 
----
 
-### 📡 Signal
-
-<img src="https://raw.githubusercontent.com/harishkumar04/harishkumar04/output/stats.svg" alt="GitHub stats" width="100%" />
-
----
+<img src="assets/headings/connect.svg" alt="Connect" width="100%" />
 
 <div align="center">
-
-**Say hi, the lights are on.**
 
 <a href="https://www.linkedin.com/in/r-harish-kumar"><img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" /></a>
 <a href="mailto:rharish0909@gmail.com"><img src="https://img.shields.io/badge/Email-1a2142?style=for-the-badge&logo=gmail&logoColor=ffd479" alt="Email" /></a>
