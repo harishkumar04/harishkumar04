@@ -10,14 +10,18 @@ last frame flows straight back into the first:
   sunset glow  a soft pulse of warm light around the sun
   main ship    sub-pixel vertical rocking, feathered so it stays anchored to the quay
   far ships    tiny drift towards the horizon and back, plus bobbing
-  container    sways and lifts slightly; the cables bend because the motion fades to zero at the trolley
+  crane        a working ship-to-shore crane (crane.py): the trolley runs along the girder, the
+               hoist lowers, locks, lifts, carries a container onto the ship, then unloads it again
   lights       existing harbor lights get a soft glow; a few twinkle
-  panel        "NEXT SHIPMENT IN" overlay (a looping display in the GIF; the live countdown is in preview.html)
+  panel        "NEXT SHIPMENT IN" countdown, rendered into the frames (ticks every second of the loop;
+               the live, configurable countdown is in preview.html)
 
 Usage:
-  python3 animate.py <master-artwork.png> <out-dir> [--width 1200] [--fps 12] [--loop 10]
+  python3 animate.py <master-artwork.png> <out-dir> [--width 1200] [--fps 8] [--loop 24] [--gif-width 1000]
 """
-import argparse, json, math, os, subprocess
+import argparse, json, math, os, subprocess, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from crane import Crane, TROLLEY, HOIST
 import numpy as np
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
@@ -59,6 +63,7 @@ class Animator:
     def __init__(self, art, R, width, loop):
         H = round(art.height * width / art.width)
         self.W, self.H, self.L, self.R = width, H, loop, R
+        self.master_w = art.width
         self.img = np.asarray(art.convert("RGB").resize((width, H), Image.LANCZOS)).astype(np.float32) / 255.0
         W = width
         s = W / 1200.0
@@ -77,9 +82,6 @@ class Animator:
         self.clouds = [(poly_mask(W, H, c["poly"], 10 * s) * poly_mask(W, H, R["sky"], 6 * s) * sun_keep * keep_ships, c["amp"] * s, c["phase"]) for c in R["clouds"]]
         self.ship = poly_mask(W, H, R["main_ship"], 4 * s)
         self.far = [(box_mask(W, H, d["box"], 2.5 * s), np.array(d["drift"]) * s) for d in R["distant_ships"]]
-        c = R["container"]
-        self.cont = box_mask(W, H, c["box"], 3 * s)
-        self.cont_w = smoothstep(c["cable_top"] * H, c["load_top"] * H, ys)     # 0 at the trolley -> 1 at the load
         # ocean helpers
         p = np.clip((ys - self.hz) / (H - self.hz), 0, 1)
         self.p = p
@@ -92,6 +94,10 @@ class Animator:
         W, H = self.W, self.H
         region = poly_mask(W, H, R["lights_region"], 0)
         r, g, b = self.img[..., 0], self.img[..., 1], self.img[..., 2]
+        # the crane's moving parts carry their own lights, so skip their original spot
+        k = W / self.master_w
+        for bx0, by0, bx1, by1 in (TROLLEY, HOIST):
+            region[int(by0 * k) - 4:int(by1 * k) + 4, int(bx0 * k) - 4:int(bx1 * k) + 4] = 0
         warm = (r > 0.85) & (g > 0.6) & (r >= b + 0.15) & (region > 0.5)
         blur = np.asarray(Image.fromarray((lum * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(7))).astype(np.float32) / 255
         peaks = warm & (lum >= blur - 1e-3) & (lum > 0.82)
@@ -105,10 +111,12 @@ class Animator:
                 break
         return chosen
 
-    def frame(self, t):
+    def frame(self, t, base=None):
+        """base: this frame's artwork (with the crane re-assembled), at output size, 0..1."""
         W, H, L, s = self.W, self.H, self.L, self.s
+        src = self.img if base is None else base
         xs, ys, p = self.xs, self.ys, self.p
-        w = TAU * t / L
+        w = TAU * t / (L / max(1, round(L / 12)))     # environment cycles every ~12 s (a divisor of the loop)
         dx = np.zeros((H, W), np.float32); dy = np.zeros((H, W), np.float32)
 
         # --- ocean: travelling waves, perspective-scaled, whole cycles per loop
@@ -132,12 +140,7 @@ class Animator:
             dx += m * d[0] * k
             dy += m * (d[1] * k + 0.35 * s * math.sin(3 * w + i))
 
-        # --- suspended container: sway + gentle lift; cables bend because the weight fades to 0 at the trolley
-        cw = self.cont * self.cont_w
-        dx += cw * 1.8 * s * math.sin(w)
-        dy += cw * (-2.2 * s * (0.5 - 0.5 * math.cos(w)) + 0.4 * s * math.sin(3 * w))
-
-        out = sample(self.img, xs - dx, ys - dy)
+        out = sample(src, xs - dx, ys - dy)
 
         # --- ocean light: shimmering glints in the sun's path and a soft brightness ripple
         sh = np.sin(xs * 0.9 / s + ys * 1.7 / s * (0.4 + p) - 5 * w) * np.sin(xs * 0.37 / s - 3 * w + ys * 0.2 / s)
@@ -167,31 +170,34 @@ class Animator:
         return img
 
     def panel(self, img, t, seconds=4 * 3600 + 32 * 60 + 18):
-        """Small glass status panel. In the GIF it is a looping display (it ticks down for one loop)."""
+        """Glass status panel, sized to stay readable at GitHub's README width (~830-1000 px).
+        In the GIF the countdown ticks down once per second of the loop."""
         s = self.s
         sec = int(t); frac = t - sec
-        k = min(1.0, max(0.0, (frac - 0.8) / 0.2))
+        k = min(1.0, max(0.0, (frac - 0.82) / 0.18))
         fmt = lambda v: "%02d:%02d:%02d" % (v // 3600, v // 60 % 60, v % 60)
-        P = self.R["panel"]
-        x0, y0, w, h = P["x"] * s, P["y"] * s, 150 * s, 50 * s
+        x0, y0, w, h = 16 * s, 14 * s, 204 * s, 88 * s
+        box = (int(x0), int(y0), int(x0 + w), int(y0 + h))
+        # glass: blur and darken what is behind the panel
+        crop = img.crop(box).filter(ImageFilter.GaussianBlur(6 * s))
+        mask = Image.new("L", crop.size, 0)
+        ImageDraw.Draw(mask).rounded_rectangle((0, 0, crop.width - 1, crop.height - 1), radius=int(9 * s), fill=255)
+        img.paste(crop, box[:2], mask)
         L0 = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(L0)
-        # glass: blur what is behind the panel
-        crop = img.crop((int(x0), int(y0), int(x0 + w), int(y0 + h))).filter(ImageFilter.GaussianBlur(4 * s))
-        img.paste(crop, (int(x0), int(y0)))
-        d.rounded_rectangle((x0, y0, x0 + w, y0 + h), radius=6 * s, fill=(12, 18, 42, 120), outline=(255, 255, 255, 40), width=1)
-        f1 = ImageFont.truetype(FONT, max(7, int(6.8 * s))); f2 = ImageFont.truetype(FONTB, int(15 * s)); f3 = ImageFont.truetype(FONT, max(6, int(6.0 * s)))
-        d.text((x0 + 10 * s, y0 + 6 * s), "NEXT SHIPMENT IN", font=f1, fill=(225, 230, 245, 205))
+        d.rounded_rectangle(box, radius=int(9 * s), fill=(9, 14, 34, 178), outline=(255, 255, 255, 64), width=max(1, int(1.2 * s)))
+        f1 = ImageFont.truetype(FONTB, int(11.5 * s)); f2 = ImageFont.truetype(FONTB, int(29 * s)); f3 = ImageFont.truetype(FONTB, int(10.4 * s))
+        d.text((x0 + 15 * s, y0 + 11 * s), "NEXT SHIPMENT IN", font=f1, fill=(205, 214, 236, 235))
         pulse = 0.5 + 0.5 * math.sin(TAU * t / 2)
-        cx, cy = x0 + 12 * s, y0 + 41 * s
-        rr = (2 + 2.6 * pulse) * s
-        d.ellipse((cx - rr, cy - rr, cx + rr, cy + rr), fill=(95, 211, 141, int(70 * pulse)))
-        d.ellipse((cx - 1.6 * s, cy - 1.6 * s, cx + 1.6 * s, cy + 1.6 * s), fill=(95, 211, 141, 255))
-        d.text((x0 + 18 * s, y0 + 37.5 * s), "SYSTEM STATUS: OPERATIONAL", font=f3, fill=(225, 230, 245, 185))
+        cx, cy = x0 + 18.5 * s, y0 + 71.5 * s
+        for rr, al in ((6.5 + 3 * pulse, 40 * pulse), (4.2, 90)):
+            d.ellipse((cx - rr * s, cy - rr * s, cx + rr * s, cy + rr * s), fill=(95, 211, 141, int(al)))
+        d.ellipse((cx - 2.6 * s, cy - 2.6 * s, cx + 2.6 * s, cy + 2.6 * s), fill=(110, 230, 155, 255))
+        d.text((x0 + 28 * s, y0 + 65 * s), "SYSTEM STATUS: OPERATIONAL", font=f3, fill=(205, 214, 236, 225))
         img.alpha_composite(L0)
         for v, a in ((seconds - sec, 1 - k), (seconds - sec - 1, k)):
             if a > 0.01:
                 L = Image.new("RGBA", img.size, (0, 0, 0, 0))
-                ImageDraw.Draw(L).text((x0 + 10 * s, y0 + 15 * s), fmt(v), font=f2, fill=(246, 242, 234, int(255 * a)))
+                ImageDraw.Draw(L).text((x0 + 14 * s, y0 + 25 * s), fmt(v), font=f2, fill=(250, 248, 242, int(255 * a)))
                 img.alpha_composite(L)
         return img
 
@@ -199,29 +205,45 @@ class Animator:
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("art"); ap.add_argument("out")
-    ap.add_argument("--width", type=int, default=1200); ap.add_argument("--fps", type=int, default=12)
-    ap.add_argument("--loop", type=float, default=10.0); ap.add_argument("--still", type=float, default=None)
+    ap.add_argument("--width", type=int, default=1200); ap.add_argument("--fps", type=int, default=10)
+    ap.add_argument("--loop", type=float, default=24.0); ap.add_argument("--still", type=float, default=None)
+    ap.add_argument("--static-t", type=float, default=9.0)
+    ap.add_argument("--gif-width", type=int, default=1000)
     a = ap.parse_args()
     R = json.load(open(os.path.join(HERE, "regions.json")))
     art = Image.open(a.art)
+    crane = Crane(a.art, a.loop)
     an = Animator(art, R, a.width, a.loop)
+
+    def base(t, width=a.width):
+        comp = Image.fromarray(np.clip(crane.compose(t), 0, 255).astype(np.uint8))
+        h = round(comp.height * width / comp.width)
+        return np.asarray(comp.resize((width, h), Image.LANCZOS)).astype(np.float32) / 255.0
+
     os.makedirs(a.out, exist_ok=True)
     if a.still is not None:
-        an.panel(an.frame(a.still), a.still).convert("RGB").save(os.path.join(a.out, "still.png"))
-        print("lights found:", len(an.lights)); return
+        an.panel(an.frame(a.still, base(a.still)), a.still).convert("RGB").save(os.path.join(a.out, "still.png"))
+        return
     frames = os.path.join(a.out, "frames"); os.makedirs(frames, exist_ok=True)
+    for f in os.listdir(frames): os.remove(os.path.join(frames, f))
     n = int(round(a.loop * a.fps))
     for i in range(n):
         t = i / n * a.loop
-        an.panel(an.frame(t), t).convert("RGB").save(os.path.join(frames, f"{i:04d}.png"))
-    # static fallback: the untouched artwork at 2x banner width, with the panel
-    big = Animator(art, R, min(art.width, a.width * 2), a.loop)
-    big.panel(Image.fromarray((big.img * 255).astype(np.uint8)).convert("RGBA"), 0.0).convert("RGB").save(os.path.join(a.out, "shipping-harbor-static.png"))
+        an.panel(an.frame(t, base(t)), t).convert("RGB").save(os.path.join(frames, f"{i:04d}.png"))
+    # static fallback: crane mid-operation, full artwork resolution (capped at 2x banner width)
+    sw = min(art.width, a.width * 2)
+    big = Animator(art, R, sw, a.loop)
+    big.panel(Image.fromarray((base(a.static_t, sw) * 255).astype(np.uint8)).convert("RGBA"), 0.0).convert("RGB").save(os.path.join(a.out, "shipping-harbor-static.png"))
     pal = os.path.join(a.out, "palette.png"); gif = os.path.join(a.out, "shipping-harbor.gif")
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-framerate", str(a.fps), "-i", f"{frames}/%04d.png", "-vf", "palettegen=max_colors=256:stats_mode=full", pal], check=True)
+    # ordered (Bayer) dithering keeps the sky stable between frames; no lossy pass, because
+    # lossy GIF compression accumulates error across frames and makes the loop point jump
+    sc = f"scale={a.gif_width}:-1:flags=lanczos"
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-framerate", str(a.fps), "-i", f"{frames}/%04d.png", "-vf", f"{sc},palettegen=max_colors=256:stats_mode=full", pal], check=True)
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-framerate", str(a.fps), "-i", f"{frames}/%04d.png", "-i", pal,
-                    "-lavfi", "paletteuse=dither=bayer:bayer_scale=4:diff_mode=rectangle", "-loop", "0", gif], check=True)
-    print(f"{n} frames, gif {os.path.getsize(gif) / 1e6:.2f} MB, lights {len(an.lights)}")
+                    "-lavfi", f"[0]{sc}[x];[x][1]paletteuse=dither=bayer:bayer_scale=5:diff_mode=rectangle", "-loop", "0", gif], check=True)
+    if subprocess.run(["which", "gifsicle"], capture_output=True).returncode == 0:
+        subprocess.run(["gifsicle", "-O3", "-b", gif], check=True)
+    print(f"{n} frames, gif {os.path.getsize(gif) / 1e6:.2f} MB")
 
 
 if __name__ == "__main__":
