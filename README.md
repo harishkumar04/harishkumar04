@@ -1,6 +1,9 @@
 <div align="center">
 
-<img src="assets/art/stargazing.gif" alt="Stargazing on a van roof under a shooting star" width="100%" />
+<picture>
+  <source media="(prefers-reduced-motion: reduce)" srcset="assets/banner/shipping-harbor-static.png" />
+  <img src="assets/banner/shipping-harbor.gif" alt="Sunset harbor: a crane loads containers onto a docked cargo ship while other ships sail toward the setting sun" width="100%" />
+</picture>
 
 <img src="https://raw.githubusercontent.com/harishkumar04/harishkumar04/output/header.svg" alt="About me: R Harish Kumar, Cloud & DevOps Engineer" width="100%" />
 
@@ -30,3 +33,5 @@
 <a href="mailto:rharish0909@gmail.com"><img src="https://img.shields.io/badge/Email-1a2142?style=for-the-badge&logo=gmail&logoColor=ffd479" alt="Email" /></a>
 
 </div>
+
+<img src="assets/art/stargazing.gif" alt="Stargazing on a van roof under a shooting star" width="100%" />
