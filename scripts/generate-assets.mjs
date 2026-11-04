@@ -1,8 +1,35 @@
 #!/usr/bin/env node
 // Generates the static, animated README assets: neon project billboards and the
 // harbor stack scene, section headings and the header. Run once after editing the data below:
-//   node scripts/generate-assets.mjs
+//   node scripts/generate-assets.mjs            (static assets + previews in dist/)
+//   GH_TOKEN=... node scripts/generate-assets.mjs --live --out dist   (header + harbor from live data)
 import { writeFileSync, mkdirSync } from "node:fs";
+
+const args = process.argv.slice(2);
+const LIVE = args.includes("--live");
+const OUT = args.includes("--out") ? args[args.indexOf("--out") + 1] : "dist";
+const LOGIN = process.env.GH_LOGIN || "harishkumar04";
+const MONTHS = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+const DEFAULT_NOW = { repo: "jenkins-rca-agent", msg: "ship the next build", date: null };
+const clip = (s, n) => (s.length > n ? s.slice(0, n - 1) + "…" : s);
+
+// latest pushed public repo (excluding this profile repo) and its last commit
+async function fetchNow() {
+  const query = `query($login:String!){user(login:$login){repositories(first:6,ownerAffiliations:[OWNER],privacy:PUBLIC,orderBy:{field:PUSHED_AT,direction:DESC}){
+    nodes{name pushedAt defaultBranchRef{target{... on Commit{messageHeadline committedDate}}}}}}}`;
+  const res = await fetch("https://api.github.com/graphql", {
+    method: "POST",
+    headers: { Authorization: `bearer ${process.env.GH_TOKEN}`, "Content-Type": "application/json", "User-Agent": "readme-assets" },
+    body: JSON.stringify({ query, variables: { login: LOGIN } }),
+  });
+  const json = await res.json();
+  if (!res.ok || json.errors) throw new Error(JSON.stringify(json.errors || res.status));
+  const repo = json.data.user.repositories.nodes.find((n) => n.name.toLowerCase() !== LOGIN.toLowerCase());
+  if (!repo) throw new Error("no repos");
+  const c = repo.defaultBranchRef?.target;
+  return { repo: repo.name, msg: c?.messageHeadline || "initial commit", date: c?.committedDate || repo.pushedAt };
+}
+const fmtDate = (iso) => (iso ? `${iso.slice(8, 10)} ${MONTHS[+iso.slice(5, 7) - 1]}` : "TODAY");
 
 const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 const FONT = "text{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}";
@@ -106,7 +133,7 @@ ${tags}
 }
 
 // ---------------------------------------------------------------- harbor (tech stack)
-function harbor() {
+function harbor(now = DEFAULT_NOW) {
   const W = 1000, H = 420, SEA = 232, Q = 300, CWD = 64, CHT = 22, T = 12;
   const r = rng(2024);
   const COLORS = ["#b8503d", "#2f63c9", "#23897d", "#c99a3a", "#5b4fc4", "#3d4f7a", "#9a3f6b"];
@@ -242,13 +269,13 @@ ${topStatic}
 </g>
 <rect x="520" y="${Q + 52}" width="480" height="${H - Q - 52}" fill="#060914" opacity=".35"/>
 
-<!-- departure board -->
-<rect x="70" y="0" width="3" height="24" fill="#2a3463"/><rect x="300" y="0" width="3" height="24" fill="#2a3463"/>
-<rect x="28" y="24" width="320" height="76" rx="4" fill="#0a0f22" stroke="#26305c" stroke-width="2"/>
-<text x="46" y="52" font-size="13" font-weight="700" letter-spacing="1.5" fill="#ffb347" xml:space="preserve">NEXT SHIPMENT  PROD   02 MIN</text>
-<text x="46" y="76" font-size="13" font-weight="700" letter-spacing="1.5" fill="#ffb347" xml:space="preserve">THEN  STAGING        09 MIN</text>
+<!-- departure board: live from the latest pushed repo -->
+<rect x="70" y="0" width="3" height="24" fill="#2a3463"/><rect x="340" y="0" width="3" height="24" fill="#2a3463"/>
+<rect x="28" y="24" width="370" height="80" rx="4" fill="#0a0f22" stroke="#26305c" stroke-width="2"/>
+<text x="46" y="50" font-size="13" font-weight="700" letter-spacing="1.2" fill="#ffb347" xml:space="preserve">NOW LOADING  ${esc(clip(now.repo.toUpperCase(), 21))}</text>
+<text x="46" y="72" font-size="12" fill="#cfe0ff">“${esc(clip(now.msg, 40))}”</text>
 <rect class="bl" x="46" y="86" width="6" height="6" fill="#3ddc84"/>
-<text x="60" y="92" font-size="9" letter-spacing="1.5" fill="#56648f">ALL PIPELINES GREEN</text>
+<text x="60" y="92" font-size="9" letter-spacing="1.5" fill="#56648f">PUSHED ${fmtDate(now.date)} · ALL PIPELINES GREEN</text>
 <rect x="590" y="0" width="3" height="20" fill="#2a3463"/><rect x="760" y="0" width="3" height="20" fill="#2a3463"/>
 <rect x="560" y="20" width="236" height="40" rx="3" fill="#0a0f22" stroke="#5ccfff" stroke-width="2"/>
 <text x="678" y="46" text-anchor="middle" font-size="15" font-weight="700" letter-spacing="4" fill="#5ccfff">BERTH 01</text>
@@ -275,8 +302,8 @@ function heading(label) {
 }
 
 // ---------------------------------------------------------------- header (terminal "About me")
-function header() {
-  const W = 1000, H = 290, FS = 15, CW = FS * 0.6, X = 32, Y0 = 82, LH = 30, T = 16;
+function header(now = DEFAULT_NOW) {
+  const W = 1000, H = 330, FS = 15, CW = FS * 0.6, X = 32, Y0 = 82, LH = 30, T = 20;
   const C = { prompt: "#ffd479", cmd: "#e6ebf5", dim: "#56648f", out: "#cfe0ff", ok: "#3ddc84", cyan: "#5ccfff" };
   const pad = (s, n) => s + " ".repeat(Math.max(0, n - s.length));
   // each line: array of [text, color]; kind decides typing speed
@@ -286,6 +313,8 @@ function header() {
     { kind: "out", parts: [[pad("r-harish-kumar", 16), C.out], [pad("Cloud & DevOps Engineer", 26), C.out], [pad("Running", 10), C.ok], ["chennai", C.out]] },
     { kind: "cmd", parts: [["$ ", C.prompt], ["cat focus.txt", C.cmd]] },
     { kind: "out", parts: [["aws · kubernetes · terraform · ci/cd · observability", C.cyan]] },
+    { kind: "cmd", parts: [["$ ", C.prompt], ["echo $CURRENTLY_BUILDING", C.cmd]] },
+    { kind: "out", parts: [["▸ ", C.ok], [clip(now.repo, 28), C.prompt], [" · ", C.dim], [clip(now.msg, Math.max(12, 62 - Math.min(now.repo.length, 28))), C.out]] },
   ];
   let t = 0.6, lines = "", css = "";
   const pct = (s) => ((s / T) * 100).toFixed(2);
@@ -335,10 +364,23 @@ ${pods}
 }
 
 
-mkdirSync("assets/projects", { recursive: true });
-PROJECTS.forEach((p, i) => writeFileSync(`assets/projects/${p.slug}.svg`, projectCard(p, i)));
-writeFileSync("assets/harbor.svg", harbor());
-mkdirSync("assets/headings", { recursive: true });
-for (const [f, l] of [["projects", "FEATURED PROJECTS"], ["stack", "STACK"], ["connect", "CONNECT"]]) writeFileSync(`assets/headings/${f}.svg`, heading(l));
-writeFileSync("assets/header.svg", header());
-console.log("Wrote assets/header.svg, assets/harbor.svg, assets/projects/*.svg, assets/headings/*.svg");
+if (LIVE) {
+  // dynamic images, rebuilt by the workflow and published to the output branch
+  let now = DEFAULT_NOW;
+  try { now = await fetchNow(); } catch (e) { console.warn("live data unavailable, using defaults:", e.message); }
+  mkdirSync(OUT, { recursive: true });
+  writeFileSync(`${OUT}/header.svg`, header(now));
+  writeFileSync(`${OUT}/harbor.svg`, harbor(now));
+  console.log(`Wrote ${OUT}/header.svg and ${OUT}/harbor.svg (${now.repo}: ${now.msg})`);
+} else {
+  mkdirSync("assets/projects", { recursive: true });
+  PROJECTS.forEach((p, i) => writeFileSync(`assets/projects/${p.slug}.svg`, projectCard(p, i)));
+  mkdirSync("assets/headings", { recursive: true });
+  for (const [f, l] of [["projects", "FEATURED PROJECTS"], ["stack", "STACK"], ["connect", "CONNECT"]]) writeFileSync(`assets/headings/${f}.svg`, heading(l));
+  // local previews of the dynamic images
+  mkdirSync(OUT, { recursive: true });
+  const demo = { repo: "Jenkins-RCA-Agent", msg: "route docker failures to the devops team", date: new Date().toISOString() };
+  writeFileSync(`${OUT}/header.svg`, header(demo));
+  writeFileSync(`${OUT}/harbor.svg`, harbor(demo));
+  console.log(`Wrote assets/projects/*.svg, assets/headings/*.svg and previews in ${OUT}/`);
+}

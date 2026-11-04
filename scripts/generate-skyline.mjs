@@ -12,7 +12,7 @@ const demo = process.argv.includes("--demo");
 
 const QUERY = `query($login:String!,$from:DateTime!,$to:DateTime!){
   user(login:$login){contributionsCollection(from:$from,to:$to){contributionCalendar{
-    weeks{firstDay contributionDays{contributionCount}}}}}}`;
+    weeks{firstDay contributionDays{contributionCount weekday}}}}}}`;
 
 async function fetchWeeks() {
   const to = new Date();
@@ -27,12 +27,20 @@ async function fetchWeeks() {
   return json.data.user.contributionsCollection.contributionCalendar.weeks.map((w) => ({
     start: w.firstDay,
     count: w.contributionDays.reduce((a, d) => a + d.contributionCount, 0),
+    days: w.contributionDays.map((d) => ({ wd: d.weekday, c: d.contributionCount })),
   }));
 }
 
 function demoWeeks() {
   const c = [3, 8, 0, 12, 25, 18, 6, 0, 14, 30, 22, 9, 17, 41, 28, 11, 5, 19, 33, 24];
-  return c.map((count, i) => ({ start: new Date(Date.now() - (WEEKS - 1 - i) * 7 * 864e5).toISOString().slice(0, 10), count }));
+  const r = rng(9);
+  return c.map((count, i) => {
+    // spread the week over days, quieter at weekends
+    const wts = [0.3, 1, 1.2, 1.1, 1.3, 0.9, 0.4].map((w) => w * (0.4 + r()));
+    const sum = wts.reduce((a, b) => a + b, 0);
+    const days = wts.map((w, wd) => ({ wd, c: Math.round((count * w) / sum) }));
+    return { start: new Date(Date.now() - (WEEKS - 1 - i) * 7 * 864e5).toISOString().slice(0, 10), count, days };
+  });
 }
 
 function rng(seed) {
@@ -54,6 +62,7 @@ function render(weeksIn) {
   const slot = (W - PAD * 2) / WEEKS;
   const max = Math.max(1, ...weeks.map((w) => w.count));
   const total = weeks.reduce((a, w) => a + w.count, 0);
+  const maxDay = Math.max(1, ...weeks.flatMap((w) => (w.days || []).map((d) => d.c)));
   const maxIdx = weeks.findIndex((w) => w.count === max && max > 0);
 
   let city = "", labels = "", lastMonthAt = -9;
@@ -71,16 +80,24 @@ function render(weeksIn) {
     g += `<rect x="${(x + w - 1).toFixed(1)}" y="${top}" width="1" height="${h}" fill="#9db4ff" opacity=".12"/>`;
     let roof = top;
 
-    const parts = { s1: "", s2: "", s3: "", fa: "", fb: "", dk: "" };
+    const parts = { s1: "", s2: "", s3: "", fa: "", fb: "", dk: "", wk: "", hot: "" };
     const windows = (bx, by, bw, bh, p) => {
       const cols = Math.floor((bw - 6) / 7), rows = Math.floor((bh - 8) / 9);
       const ox = bx + (bw - cols * 7 + 3) / 2;
       for (let rr = 0; rr < rows; rr++) for (let c = 0; c < cols; c++) {
         const wx = (ox + c * 7).toFixed(1), wy = by + 6 + rr * 9;
         const d = `M${wx} ${wy}h4v5h-4z`;
-        if (r() < p) {
+        // each floor is a day of the week (Mon at street level … Sun on top, repeating);
+        // busier days light more windows, weekends burn dimmer, the busiest day glows
+        const wd = (Math.floor((GROUND - wy) / 9) % 7 + 1) % 7;
+        const day = wk.days?.find((q) => q.wd === wd);
+        const dc = day ? day.c : wk.count / 7;
+        const pr = dc === 0 ? 0.05 : 0.25 + 0.7 * Math.pow(dc / maxDay, 0.6);
+        if (r() < pr) {
           const k = r();
-          if (k < 0.07) parts.fa += d; else if (k < 0.14) parts.fb += d;
+          if (day && dc === maxDay) parts.hot += d;
+          else if (wd === 0 || wd === 6) parts.wk += d;
+          else if (k < 0.07) parts.fa += d; else if (k < 0.14) parts.fb += d;
           else if (k < 0.62) parts.s1 += d; else if (k < 0.93) parts.s2 += d; else parts.s3 += d;
         } else parts.dk += d;
       }
@@ -114,6 +131,8 @@ function render(weeksIn) {
     g += gr("", parts.s1, "#ffd479", 'opacity=".92"');
     g += gr("", parts.s2, "#ffb347", 'opacity=".85"');
     g += gr("", parts.s3, "#a8d8ff", 'opacity=".8"');
+    g += gr("", parts.wk, "#c79a55", 'opacity=".45"');
+    g += gr("hot", parts.hot, "#fff3d1", 'filter="url(#hotglow)"');
     g += gr("fa", parts.fa, "#ffe29a", `style="animation-delay:-${(r() * 7).toFixed(2)}s"`);
     g += gr("fb", parts.fb, "#ffd479", `style="animation-delay:-${(r() * 5).toFixed(2)}s"`);
     city += `<g>${g}</g>`;
@@ -149,7 +168,9 @@ function render(weeksIn) {
 <linearGradient id="b0" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a2142"/><stop offset="1" stop-color="#0b1022"/></linearGradient>
 <linearGradient id="b1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#151b38"/><stop offset="1" stop-color="#090d1d"/></linearGradient>
 <linearGradient id="b2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1d1f45"/><stop offset="1" stop-color="#0c1024"/></linearGradient>
+<filter id="hotglow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
 <style>
+.hot{animation:hot 3s ease-in-out infinite}@keyframes hot{50%{opacity:.75}}
 text{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
 .tw{animation:tw 4s ease-in-out infinite}@keyframes tw{0%,100%{opacity:.2}50%{opacity:1}}
 .fa{animation:fa 9s steps(1) infinite}@keyframes fa{0%,100%{opacity:1}35%{opacity:.05}55%{opacity:1}}

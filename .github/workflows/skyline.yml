@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ["scripts/generate-skyline.mjs", ".github/workflows/skyline.yml"]
+    paths: ["scripts/generate-skyline.mjs", "scripts/generate-assets.mjs", ".github/workflows/skyline.yml"]
 
 permissions:
   contents: write
@@ -33,6 +33,12 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_LOGIN: ${{ github.repository_owner }}
           OUT: dist/skyline.svg
+
+      - name: Build live header and harbor (latest pushed repo)
+        run: node scripts/generate-assets.mjs --live --out dist
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_LOGIN: ${{ github.repository_owner }}
 
       - name: Publish to output branch
         uses: crazy-max/ghaction-github-pages@v4
