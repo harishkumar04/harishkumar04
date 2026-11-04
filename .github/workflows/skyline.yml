@@ -25,7 +25,8 @@ jobs:
       - name: Keep previous images as fallback
         run: |
           mkdir -p dist
-          git fetch --depth=1 origin output && git --work-tree=dist checkout origin/output -- . || true
+          # git archive extracts the files without touching git's index (checkout would stage them)
+          git fetch --depth=1 origin output && git archive FETCH_HEAD | tar -x -C dist || true
 
       - name: Build skyline from contribution data
         run: node scripts/generate-skyline.mjs
@@ -48,7 +49,7 @@ jobs:
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add README.md
             git commit -m "Update skyline week links"
-            git pull --rebase -q origin main && git push origin HEAD:main || echo "README push skipped"
+            git push origin HEAD:main || echo "README push skipped (main moved on); the next run will retry"
           fi
         env:
           GH_LOGIN: ${{ github.repository_owner }}
