@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 // Generates the static, animated README assets: neon project billboards and the
-// harbor stack scene, section headings and the header. Run once after editing the data below:
+// section headings and the live terminal header. Run once after editing the data below:
 //   node scripts/generate-assets.mjs            (static assets + previews in dist/)
-//   GH_TOKEN=... node scripts/generate-assets.mjs --live --out dist   (header + harbor from live data)
+//   GH_TOKEN=... node scripts/generate-assets.mjs --live --out dist   (terminal header from live data)
 import { writeFileSync, mkdirSync } from "node:fs";
 
 const args = process.argv.slice(2);
@@ -132,157 +132,6 @@ ${tags}
 `;
 }
 
-// ---------------------------------------------------------------- harbor (tech stack)
-function harbor(now = DEFAULT_NOW) {
-  const W = 1000, H = 420, SEA = 232, Q = 300, CWD = 64, CHT = 22, T = 12;
-  const r = rng(2024);
-  const COLORS = ["#b8503d", "#2f63c9", "#23897d", "#c99a3a", "#5b4fc4", "#3d4f7a", "#9a3f6b"];
-  const COLS = [
-    ["DOCKER", "AWS"],
-    ["KUBERNETES", "HELM", "TERRAFORM"],
-    ["JENKINS", "GH ACTIONS"],
-    ["PROMETHEUS", "GRAFANA", "LOKI"],
-    ["PYTHON"],
-    ["POSTGRESQL", "BEDROCK", "RELEASE"],
-  ];
-  const box = (x, y, color, label, extra = "") => {
-    let g = `<g ${extra}><rect x="${x}" y="${y}" width="${CWD}" height="${CHT}" fill="${color}"/>`;
-    for (let k = 6; k < CWD; k += 6) g += `<rect x="${x + k}" y="${y + 2}" width="1" height="${CHT - 4}" fill="#000" opacity=".18"/>`;
-    g += `<rect x="${x}" y="${y}" width="${CWD}" height="2" fill="#fff" opacity=".12"/>`;
-    if (label) g += `<rect x="${x + 6}" y="${y + 6}" width="${CWD - 12}" height="10" fill="#0b1022" opacity=".55"/><text x="${x + CWD / 2}" y="${y + 14}" text-anchor="middle" font-size="7.5" font-weight="700" letter-spacing=".4" fill="#f2f5ff">${label}</text>`;
-    return g + "</g>";
-  };
-
-  // sky + stars
-  let stars = "";
-  for (let i = 0; i < 60; i++) stars += `<circle class="tw" style="animation-delay:-${(r() * 6).toFixed(1)}s;animation-duration:${(3 + r() * 4).toFixed(1)}s" cx="${(r() * W).toFixed(0)}" cy="${(r() * (SEA - 40)).toFixed(0)}" r="${(0.4 + r() * 0.8).toFixed(1)}" fill="#dfe8ff"/>`;
-
-  // departed ships on the horizon
-  const far = (x, s, dur, delay) => `<g class="away" style="animation-duration:${dur}s;animation-delay:-${delay}s"><g transform="translate(${x} ${SEA - 2}) scale(${s})">
-<path d="M0 0h46l-4 6H4z" fill="#1a2246"/><rect x="6" y="-5" width="8" height="5" fill="#2a3463"/><rect x="15" y="-5" width="8" height="5" fill="#34407a"/><rect x="24" y="-4" width="8" height="4" fill="#2a3463"/><rect x="36" y="-9" width="6" height="9" fill="#2a3463"/>
-<circle class="bl" cx="39" cy="-10" r="1" fill="#ff4d5e"/><circle cx="2" cy="-1" r=".8" fill="#ffd479"/></g></g>`;
-
-  // quay stacks
-  let stacks = "", PX = 0, PY = 0, topStatic = "";
-  COLS.forEach((col, ci) => {
-    const x = 20 + ci * (CWD + 4);
-    col.forEach((label, k) => {
-      const y = Q - (k + 1) * (CHT + 2) + 2;
-      const color = label === "RELEASE" ? "#e0663d" : COLORS[(ci * 3 + k) % COLORS.length];
-      if (label === "RELEASE") { PX = x; PY = y; topStatic = box(x, y, color, label, 'class="stackTop"'); }
-      else stacks += box(x, y, color, label);
-    });
-  });
-  const pickCx = PX + CWD / 2;
-
-  // crane geometry
-  const BOOM_Y = 110, TROL_Y = 118, HOOK0 = 140, SX = 750;
-  const DX = SX - pickCx;
-  const DP = PY - 6 - HOOK0;            // lower to pick
-  const DD = Q + 14 - 6 - HOOK0;        // lower into the hold (hidden by hull)
-  const CMAX = HOOK0 - (TROL_Y + 6) + DD, c0 = (HOOK0 - (TROL_Y + 6)) / CMAX, cp = (HOOK0 - (TROL_Y + 6) + DP) / CMAX;
-
-  const css = `
-.tw{animation:tw 4s ease-in-out infinite}@keyframes tw{0%,100%{opacity:.2}50%{opacity:1}}
-.bl{animation:bl 2s ease-in-out infinite}@keyframes bl{0%,100%{opacity:.15}40%{opacity:1}}
-.away{animation:away 80s linear infinite}@keyframes away{0%{transform:translateX(0);opacity:0}6%{opacity:1}85%{opacity:1}100%{transform:translateX(260px);opacity:0}}
-.bob{animation:bob 5s ease-in-out infinite}@keyframes bob{50%{transform:translateY(1.5px)}}
-.sh{animation:sh 5s ease-in-out infinite}@keyframes sh{0%,100%{opacity:0}50%{opacity:.25}}
-.trol{animation:trol ${T}s infinite}
-@keyframes trol{0%,30%{transform:translateX(0);animation-timing-function:ease-in-out}52%,80%{transform:translateX(${DX}px);animation-timing-function:ease-in-out}96%,100%{transform:translateX(0)}}
-.hook{animation:hook ${T}s infinite}
-@keyframes hook{0%{transform:translateY(0);animation-timing-function:ease-in-out}10%,16%{transform:translateY(${DP}px);animation-timing-function:ease-in-out}28%,52%{transform:translateY(0);animation-timing-function:ease-in-out}66%,70%{transform:translateY(${DD}px);animation-timing-function:ease-in-out}82%,100%{transform:translateY(0)}}
-.cable{transform-box:fill-box;transform-origin:top;animation:cable ${T}s infinite}
-@keyframes cable{0%{transform:scaleY(${c0.toFixed(4)});animation-timing-function:ease-in-out}10%,16%{transform:scaleY(${cp.toFixed(4)});animation-timing-function:ease-in-out}28%,52%{transform:scaleY(${c0.toFixed(4)});animation-timing-function:ease-in-out}66%,70%{transform:scaleY(1);animation-timing-function:ease-in-out}82%,100%{transform:scaleY(${c0.toFixed(4)})}}
-.carry{animation:carry ${T}s steps(1) infinite}@keyframes carry{0%{opacity:0}12%{opacity:1}69%{opacity:0}}
-.stackTop{animation:stop ${T}s infinite}@keyframes stop{0%,11.9%{opacity:1}12%,86%{opacity:0}96%,100%{opacity:1}}
-.sweep{animation:sweep 6s ease-in-out infinite}@keyframes sweep{0%,100%{opacity:.05}50%{opacity:.11}}`;
-
-  // ship
-  let shipBoxes = "";
-  const rows = [Q - CHT, Q - 2 * CHT - 2];
-  for (let x = 586; x < 860; x += CWD + 2) {
-    if (x < SX && x + CWD > SX) continue; // open hatch
-    rows.forEach((y, k) => { if (!(k === 1 && r() < 0.25)) shipBoxes += box(x, y, COLORS[Math.floor(r() * COLORS.length)], ""); });
-  }
-  let bridgeWin = "";
-  for (let y = 238; y < 292; y += 9) for (let x = 893; x < 930; x += 8) if (r() < 0.6) bridgeWin += `M${x} ${y}h4v4h-4z`;
-
-  let shimmer = "";
-  for (let i = 0; i < 18; i++) shimmer += `<rect class="sh" style="animation-delay:-${(r() * 5).toFixed(1)}s" x="${(520 + r() * 470).toFixed(0)}" y="${(Q + 60 + r() * 50).toFixed(0)}" width="${(10 + r() * 36).toFixed(0)}" height="1" fill="#ffd479"/>`;
-  for (let i = 0; i < 10; i++) shimmer += `<rect class="sh" style="animation-delay:-${(r() * 5).toFixed(1)}s" x="${(r() * W).toFixed(0)}" y="${(SEA + 8 + r() * 50).toFixed(0)}" width="${(8 + r() * 26).toFixed(0)}" height="1" fill="#8fb4ff"/>`;
-
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Night harbor: a crane loads a release container onto a ship. Containers on the quay are labelled with my stack: ${COLS.flat().filter((l) => l !== "RELEASE").join(", ")}.">
-<defs>
-<linearGradient id="hsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#04060e"/><stop offset=".75" stop-color="#101a3c"/><stop offset="1" stop-color="#2b2150"/></linearGradient>
-<linearGradient id="hsea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#121a3d"/><stop offset="1" stop-color="#04060e"/></linearGradient>
-<radialGradient id="halo"><stop offset="0" stop-color="#cfe0ff" stop-opacity=".3"/><stop offset="1" stop-color="#cfe0ff" stop-opacity="0"/></radialGradient>
-<linearGradient id="beam" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe9b0" stop-opacity=".9"/><stop offset="1" stop-color="#ffe9b0" stop-opacity="0"/></linearGradient>
-<style>${FONT}${css}</style>
-</defs>
-<rect width="${W}" height="${H}" rx="14" fill="url(#hsky)"/>
-${stars}
-<circle cx="930" cy="62" r="46" fill="url(#halo)"/><circle cx="930" cy="62" r="16" fill="#eaf1ff" opacity=".9"/>
-<rect y="${SEA}" width="${W}" height="${H - SEA}" fill="url(#hsea)"/>
-<rect y="${SEA}" width="${W}" height="1" fill="#6f86d6" opacity=".35"/>
-${far(560, 0.9, 90, 10)}${far(700, 0.6, 110, 55)}${far(380, 0.5, 130, 90)}
-${shimmer}
-
-<!-- quay -->
-<rect x="0" y="${Q}" width="530" height="${H - Q}" fill="#0f1430"/><rect x="0" y="${Q}" width="530" height="3" fill="#2a3463"/>
-<path d="M0 ${Q + 14}h530" stroke="#ffd479" stroke-opacity=".25" stroke-dasharray="14 10" stroke-width="2"/>
-${[30, 270].map((x) => `<rect x="${x}" y="${Q - 120}" width="3" height="120" fill="#2a3463"/><rect x="${x - 6}" y="${Q - 124}" width="15" height="4" fill="#3a4680"/><path class="sweep" d="M${x - 4} ${Q - 120} L${x - 40} ${Q} L${x + 44} ${Q} Z" fill="url(#beam)"/>`).join("")}
-${stacks}
-${topStatic}
-
-<!-- crane legs -->
-<path d="M440 ${Q} L452 ${BOOM_Y + 8} M500 ${Q} L488 ${BOOM_Y + 8} M444 ${Q - 70} L496 ${Q - 70} M447 ${Q - 130} L493 ${Q - 130}" stroke="#3a4a85" stroke-width="5" fill="none"/>
-<path d="M444 ${Q - 70} L493 ${Q - 130} M496 ${Q - 70} L447 ${Q - 130}" stroke="#2a3463" stroke-width="2"/>
-<!-- boom + stays -->
-<rect x="300" y="${BOOM_Y}" width="530" height="8" fill="#3a4a85"/>
-<rect x="300" y="${BOOM_Y + 7}" width="530" height="1" fill="#5c6fb8"/>
-<path d="M470 ${BOOM_Y - 52} L310 ${BOOM_Y} M470 ${BOOM_Y - 52} L820 ${BOOM_Y}" stroke="#2f3b6e" stroke-width="2"/>
-<rect x="466" y="${BOOM_Y - 54}" width="8" height="54" fill="#3a4a85"/>
-<rect x="440" y="${BOOM_Y - 16}" width="60" height="16" fill="#26305c"/><rect x="446" y="${BOOM_Y - 12}" width="10" height="6" fill="#ffd479" opacity=".8"/>
-<circle class="bl" cx="470" cy="${BOOM_Y - 56}" r="2.5" fill="#ff4d5e"/>
-
-<!-- trolley, cable, hook, carried container -->
-<g class="trol">
-  <rect class="cable" x="${pickCx - 0.75}" y="${TROL_Y + 6}" width="1.5" height="${CMAX}" fill="#9aa8d6"/>
-  <g class="hook">
-    <rect x="${pickCx - 10}" y="${HOOK0}" width="20" height="4" fill="#ffb347"/>
-    <g class="carry">${box(PX, HOOK0 + 6, "#e0663d", "RELEASE")}</g>
-  </g>
-  <rect x="${pickCx - 14}" y="${TROL_Y - 10}" width="28" height="14" rx="2" fill="#4a5aa0"/><circle cx="${pickCx}" cy="${TROL_Y + 6}" r="2" fill="#ffd479"/>
-</g>
-
-<!-- ship -->
-<g class="bob">
-  <rect x="884" y="232" width="52" height="${Q - 232}" fill="#222b55"/><rect x="880" y="228" width="60" height="6" fill="#2d3768"/>
-  <path d="${bridgeWin}" fill="#ffd479" opacity=".85"/>
-  <rect x="924" y="206" width="4" height="22" fill="#2d3768"/><circle class="bl" cx="926" cy="204" r="2" fill="#ff4d5e"/>
-  ${shipBoxes}
-  <path d="M560 ${Q} H970 L950 ${Q + 52} H578 Z" fill="#1b2346"/>
-  <path d="M566 ${Q + 34} H961 L954 ${Q + 52} H578 Z" fill="#8a2f3a"/>
-  <rect x="560" y="${Q}" width="410" height="2" fill="#3a4680"/>
-  <text x="600" y="${Q + 22}" font-size="10" letter-spacing="3" fill="#cfe0ff" opacity=".7">HK-01 · PROD</text>
-</g>
-<rect x="520" y="${Q + 52}" width="480" height="${H - Q - 52}" fill="#060914" opacity=".35"/>
-
-<!-- departure board: live from the latest pushed repo -->
-<rect x="70" y="0" width="3" height="24" fill="#2a3463"/><rect x="340" y="0" width="3" height="24" fill="#2a3463"/>
-<rect x="28" y="24" width="370" height="80" rx="4" fill="#0a0f22" stroke="#26305c" stroke-width="2"/>
-<text x="46" y="50" font-size="13" font-weight="700" letter-spacing="1.2" fill="#ffb347" xml:space="preserve">NOW LOADING  ${esc(clip(now.repo.toUpperCase(), 21))}</text>
-<text x="46" y="72" font-size="12" fill="#cfe0ff">“${esc(clip(now.msg, 40))}”</text>
-<rect class="bl" x="46" y="86" width="6" height="6" fill="#3ddc84"/>
-<text x="60" y="92" font-size="9" letter-spacing="1.5" fill="#56648f">PUSHED ${fmtDate(now.date)} · ALL PIPELINES GREEN</text>
-<rect x="590" y="0" width="3" height="20" fill="#2a3463"/><rect x="760" y="0" width="3" height="20" fill="#2a3463"/>
-<rect x="560" y="20" width="236" height="40" rx="3" fill="#0a0f22" stroke="#5ccfff" stroke-width="2"/>
-<text x="678" y="46" text-anchor="middle" font-size="15" font-weight="700" letter-spacing="4" fill="#5ccfff">BERTH 01</text>
-</svg>
-`;
-}
-
 // ---------------------------------------------------------------- section headings
 function heading(label) {
   const W = 1000, H = 48, y = 30, tw = label.length * 9 * 1.0 + (label.length - 1) * 4;
@@ -370,17 +219,15 @@ if (LIVE) {
   try { now = await fetchNow(); } catch (e) { console.warn("live data unavailable, using defaults:", e.message); }
   mkdirSync(OUT, { recursive: true });
   writeFileSync(`${OUT}/header.svg`, header(now));
-  writeFileSync(`${OUT}/harbor.svg`, harbor(now));
-  console.log(`Wrote ${OUT}/header.svg and ${OUT}/harbor.svg (${now.repo}: ${now.msg})`);
+  console.log(`Wrote ${OUT}/header.svg (${now.repo}: ${now.msg})`);
 } else {
   mkdirSync("assets/projects", { recursive: true });
   PROJECTS.forEach((p, i) => writeFileSync(`assets/projects/${p.slug}.svg`, projectCard(p, i)));
   mkdirSync("assets/headings", { recursive: true });
-  for (const [f, l] of [["projects", "FEATURED PROJECTS"], ["stack", "STACK"], ["connect", "CONNECT"]]) writeFileSync(`assets/headings/${f}.svg`, heading(l));
+  for (const [f, l] of [["projects", "FEATURED PROJECTS"], ["connect", "CONNECT"]]) writeFileSync(`assets/headings/${f}.svg`, heading(l));
   // local previews of the dynamic images
   mkdirSync(OUT, { recursive: true });
   const demo = { repo: "Jenkins-RCA-Agent", msg: "route docker failures to the devops team", date: new Date().toISOString() };
   writeFileSync(`${OUT}/header.svg`, header(demo));
-  writeFileSync(`${OUT}/harbor.svg`, harbor(demo));
   console.log(`Wrote assets/projects/*.svg, assets/headings/*.svg and previews in ${OUT}/`);
 }
