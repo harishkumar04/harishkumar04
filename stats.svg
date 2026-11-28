@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 230" width="1000" height="230" role="img" aria-label="GitHub stats for harishkumar04">
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#070b18"/><stop offset="1" stop-color="#121838"/></linearGradient>
+<style>
+text{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.in{animation:in .9s ease-out both}@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.bar{transform-box:fill-box;transform-origin:left center;animation:grow 1.4s cubic-bezier(.2,.8,.2,1) both}@keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.scan{animation:scan 6s linear infinite}@keyframes scan{from{transform:translateY(-10px)}to{transform:translateY(240px)}}
+</style>
+</defs>
+<rect width="1000" height="230" rx="14" fill="url(#bg)" stroke="#232b52"/>
+<rect class="scan" x="1" y="0" width="998" height="1" fill="#5ccfff" opacity=".18"/>
+<line x1="500" y1="36" x2="500" y2="200" stroke="#232b52"/>
+<g class="in" style="animation-delay:0.00s">
+<text x="40" y="70" font-size="11" letter-spacing="2" fill="#7f8fb8">CONTRIBUTIONS</text>
+<text x="40" y="108" font-size="34" font-weight="700" fill="#ffd479">363</text>
+<text x="113" y="107" font-size="12" fill="#56648f">past year</text></g><g class="in" style="animation-delay:0.15s">
+<text x="270" y="70" font-size="11" letter-spacing="2" fill="#7f8fb8">COMMITS</text>
+<text x="270" y="108" font-size="34" font-weight="700" fill="#ffd479">259</text>
+<text x="343" y="107" font-size="12" fill="#56648f">past year</text></g><g class="in" style="animation-delay:0.30s">
+<text x="40" y="154" font-size="11" letter-spacing="2" fill="#7f8fb8">PULL REQUESTS</text>
+<text x="40" y="192" font-size="34" font-weight="700" fill="#ffd479">10</text>
+<text x="92" y="191" font-size="12" fill="#56648f">past year</text></g><g class="in" style="animation-delay:0.45s">
+<text x="270" y="154" font-size="11" letter-spacing="2" fill="#7f8fb8">REPOS</text>
+<text x="270" y="192" font-size="34" font-weight="700" fill="#ffd479">27</text>
+<text x="322" y="191" font-size="12" fill="#56648f">0 ★</text></g>
+<text x="540" y="48" font-size="11" letter-spacing="2" fill="#7f8fb8">TOP LANGUAGES</text><g class="in" style="animation-delay:0.40s">
+<text x="540" y="82" font-size="13" fill="#cfe0ff">Python</text>
+<rect x="650" y="72" width="300" height="12" rx="6" fill="#ffffff" fill-opacity=".05"/>
+<rect class="bar" style="animation-delay:0.50s" x="650" y="72" width="136.8" height="12" rx="6" fill="#3572A5"/>
+<text x="792.8" y="82" font-size="11" fill="#8a96bd">45.6%</text></g><g class="in" style="animation-delay:0.52s">
+<text x="540" y="114" font-size="13" fill="#cfe0ff">Java</text>
+<rect x="650" y="104" width="300" height="12" rx="6" fill="#ffffff" fill-opacity=".05"/>
+<rect class="bar" style="animation-delay:0.62s" x="650" y="104" width="61.6" height="12" rx="6" fill="#b07219"/>
+<text x="717.6" y="114" font-size="11" fill="#8a96bd">20.5%</text></g><g class="in" style="animation-delay:0.64s">
+<text x="540" y="146" font-size="13" fill="#cfe0ff">JavaScript</text>
+<rect x="650" y="136" width="300" height="12" rx="6" fill="#ffffff" fill-opacity=".05"/>
+<rect class="bar" style="animation-delay:0.74s" x="650" y="136" width="53.4" height="12" rx="6" fill="#f1e05a"/>
+<text x="709.4" y="146" font-size="11" fill="#8a96bd">17.8%</text></g><g class="in" style="animation-delay:0.76s">
+<text x="540" y="178" font-size="13" fill="#cfe0ff">HTML</text>
+<rect x="650" y="168" width="300" height="12" rx="6" fill="#ffffff" fill-opacity=".05"/>
+<rect class="bar" style="animation-delay:0.86s" x="650" y="168" width="29.9" height="12" rx="6" fill="#e34c26"/>
+<text x="685.9" y="178" font-size="11" fill="#8a96bd">10.0%</text></g><g class="in" style="animation-delay:0.88s">
+<text x="540" y="210" font-size="13" fill="#cfe0ff">Shell</text>
+<rect x="650" y="200" width="300" height="12" rx="6" fill="#ffffff" fill-opacity=".05"/>
+<rect class="bar" style="animation-delay:0.98s" x="650" y="200" width="5.1" height="12" rx="6" fill="#89e051"/>
+<text x="661.1" y="210" font-size="11" fill="#8a96bd">1.7%</text></g>
+</svg>
